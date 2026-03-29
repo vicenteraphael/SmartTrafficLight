@@ -1,0 +1,6 @@
+SmartTrafficLight	KEYWORD1
+begin	KEYWORD2
+update	KEYWORD2
+attach	KEYWORD2
+setIntervals    KEYWORD2
+NO_PIN	LITERAL1
