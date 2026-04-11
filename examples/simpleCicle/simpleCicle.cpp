@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "SmartTrafficLight.h"
 
+
 // --------------- CONSTANTS ---------------
 
 #define GREEN_PIN (12)
@@ -13,6 +14,7 @@
 #define RED_TIMEOUT (4000)
 
 #define MIN_GREEN_TIME (4000)
+
 
 // --------------- PROGRAM ---------------
 
