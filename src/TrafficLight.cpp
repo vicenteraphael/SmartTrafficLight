@@ -17,7 +17,7 @@ void SmartTrafficLight::setIntervals(const unsigned long g_interval, const unsig
     minGreenTime = min_g_time;
 }
 
-SmartTrafficLight::SmartTrafficLight() {}
+SmartTrafficLight::SmartTrafficLight() = default;
 
 SmartTrafficLight::SmartTrafficLight(const uint8_t g_pin, const uint8_t y_pin, const uint8_t r_pin, const uint8_t b_pin) {
     attach(g_pin, y_pin, r_pin, b_pin);
@@ -27,14 +27,17 @@ SmartTrafficLight::SmartTrafficLight(const uint8_t g_pin, const uint8_t y_pin, c
 // ================================ INITIALIZATION ================================
 
 void SmartTrafficLight::assertBegun() {
-    if (!begun) {
-        Serial.begin(9600);
-        Serial.println("Fatal: unitialized..\nUse attach() to configure the pins\nUse setIntervals() to customize the traffic light intervals");
-        while(true);
-    }
+        if (!begun) {
+            Serial.begin(9600);
+            Serial.println("Fatal: unitialized...");
+            Serial.println("Use attach() to configure the pins");
+            Serial.println("Use setIntervals() to customize the traffic light intervals");
+            Serial.println("Use begin() to start the traffic light");
+            while(true);
+        }
 }
 
-void SmartTrafficLight::begin() {
+void SmartTrafficLight::begin(bool mode) {
     // Safety verification
     if (greenPin == NO_PIN || yellowPin == NO_PIN || redPin == NO_PIN) {
         assertBegun();
@@ -47,8 +50,8 @@ void SmartTrafficLight::begin() {
     pinMode(redPin, OUTPUT);
     
     if (buttonPin != NO_PIN) pinMode(buttonPin, INPUT_PULLUP);
-
-    turnOn(greenPin);
+  
+  	mode ? enable() : disable();
 }
 
 
@@ -60,6 +63,10 @@ void SmartTrafficLight::turnOn(const uint8_t led_pin){
     lastTimeTransition = millis();
 
     if (pinOn != NO_PIN) digitalWrite(pinOn, LOW);
+    
+    if (led_pin == greenPin && onGreen) onGreen();
+    else if (led_pin == redPin && onRed) onRed();
+
     digitalWrite(led_pin, HIGH);
 
     pinOn = led_pin;
@@ -87,17 +94,11 @@ void SmartTrafficLight::handleGreen() {
 }
 
 void SmartTrafficLight::handleYellow() {
-    if (millis() - lastTimeTransition >= yellowInterval) {
-        turnOn(redPin);
-        if (onRed) onRed();
-    }
+    if (millis() - lastTimeTransition >= yellowInterval) turnOn(redPin);
 }
 
 void SmartTrafficLight::handleRed() {
-    if (millis() - lastTimeTransition >= redInterval) {
-        turnOn(greenPin);
-        if (onGreen) onGreen();
-    } 
+    if (millis() - lastTimeTransition >= redInterval) turnOn(greenPin);
 }
 
 void SmartTrafficLight::handleDisabled() {
@@ -127,20 +128,25 @@ void SmartTrafficLight::update() {
 
 void SmartTrafficLight::disable() {
     assertBegun();
+    if (disabled) return;
+    
     disabled = true;
+    turnOn(yellowPin);
 }
 
 void SmartTrafficLight::enable() {
     assertBegun();
+    if (!disabled && pinOn != NO_PIN) return;
+
     disabled = false;
+  	turnOn(greenPin);
 }
 
+
 void SmartTrafficLight::onTurnGreen(void (*func)()) {
-    assertBegun();
     onGreen = func;
 }
 
 void SmartTrafficLight::onTurnRed(void (*func)()) {
-    assertBegun();
     onRed = func;
 }

@@ -65,7 +65,7 @@ class SmartTrafficLight {
             unsigned long min_g_time = DEFAULT_MIN_GREEN_TIME
         );
 
-        void begin();
+        void begin(bool mode);
 
         void update();
 
