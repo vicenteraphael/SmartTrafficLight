@@ -161,6 +161,7 @@ void SmartTrafficLight::startBlinking() {
     if (state == BLINKING_YELLOW) return;
     
     state = BLINKING_YELLOW;
+    if (onStartBlink) onStartBlink();
     turnOn(yellowPin);
 }
 
@@ -169,6 +170,7 @@ void SmartTrafficLight::stopBlinking() {
     if (state != BLINKING_YELLOW) return;
     
     state = GREEN;
+    if (onStopBlink) onStopBlink();
     turnOn(greenPin);
 }
 
@@ -177,6 +179,7 @@ void SmartTrafficLight::enable() {
     if (state != DISABLED) return;
 
     state = GREEN;
+    if (onEn) onEn();
   	turnOn(greenPin);
 }
 
@@ -185,6 +188,7 @@ void SmartTrafficLight::disable() {
     if (state == DISABLED) return;
     
     state = DISABLED;
+    if (onDis) onDis();
     turnOff();
 }
 
@@ -200,6 +204,26 @@ void SmartTrafficLight::onTurnYellow(void (*func)()) {
 
 void SmartTrafficLight::onTurnRed(void (*func)()) {
     onRed = func;
+}
+
+void SmartTrafficLight::onEnable(void (*func)()) {
+    onEn = func;
+}
+
+void SmartTrafficLight::onDisable(void (*func)()) {
+    onDis = func;
+}
+
+void SmartTrafficLight::onStartBlinking(void (*func)()) {
+    onStartBlink = func;
+}
+
+void SmartTrafficLight::onStopBlinking(void (*func)()) {
+    onStopBlink = func;
+}
+
+void SmartTrafficLight::onAlterState(void (*func)()) {
+    onAlter = func;
 }
 
 // Getter functions

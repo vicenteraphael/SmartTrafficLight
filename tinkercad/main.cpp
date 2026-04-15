@@ -14,15 +14,15 @@ enum State {
     GREEN,
     YELLOW,
     RED,
-    BLINKING,
+    BLINKING_YELLOW,
     DISABLED
 };
 
-const char stringStates[][9] = {
+const char stringStates[][16] = {
     "GREEN",
     "YELLOW",
     "RED",
-    "BLINKING",
+    "BLINKING_YELLOW",
     "DISABLED",
 };
 
@@ -59,6 +59,13 @@ class SmartTrafficLight {
         void (*onGreen)() = nullptr;
         void (*onYellow)() = nullptr;
         void (*onRed)() = nullptr;
+
+        void (*onEn)() = nullptr;
+        void (*onDis)() = nullptr;
+        void (*onStartBlink)() = nullptr;
+        void (*onStopBlink)() = nullptr;
+
+        void (*onAlter)() = nullptr;
 
     public:
         SmartTrafficLight();
@@ -100,6 +107,13 @@ class SmartTrafficLight {
         void onTurnGreen(void (*func)());
         void onTurnYellow(void (*func)());
         void onTurnRed(void (*func)());
+        
+        void onEnable(void (*func)());
+        void onDisable(void (*func)());
+        void onStartBlinking(void (*func)());
+        void onStopBlinking(void (*func)());
+
+        void onAlterState(void (*func)());
 
         const char* getCurrentState();
         const uint8_t getPinOn();
@@ -251,7 +265,7 @@ void SmartTrafficLight::update() {
             handleRed();
             break;
 
-        case BLINKING:
+        case BLINKING_YELLOW:
             handleBlinking();
     }
 }
@@ -263,17 +277,19 @@ void SmartTrafficLight::update() {
 
 void SmartTrafficLight::startBlinking() {
     assertBegun();
-    if (state == BLINKING) return;
+    if (state == BLINKING_YELLOW) return;
     
-    state = BLINKING;
+    state = BLINKING_YELLOW;
+    if (onStartBlink) onStartBlink();
     turnOn(yellowPin);
 }
 
 void SmartTrafficLight::stopBlinking() {
     assertBegun();
-    if (state != BLINKING) return;
+    if (state != BLINKING_YELLOW) return;
     
     state = GREEN;
+    if (onStopBlink) onStopBlink();
     turnOn(greenPin);
 }
 
@@ -282,6 +298,7 @@ void SmartTrafficLight::enable() {
     if (state != DISABLED) return;
 
     state = GREEN;
+    if (onEn) onEn();
   	turnOn(greenPin);
 }
 
@@ -290,6 +307,7 @@ void SmartTrafficLight::disable() {
     if (state == DISABLED) return;
     
     state = DISABLED;
+    if (onDis) onDis();
     turnOff();
 }
 
@@ -307,6 +325,26 @@ void SmartTrafficLight::onTurnRed(void (*func)()) {
     onRed = func;
 }
 
+void SmartTrafficLight::onEnable(void (*func)()) {
+    onEn = func;
+}
+
+void SmartTrafficLight::onDisable(void (*func)()) {
+    onDis = func;
+}
+
+void SmartTrafficLight::onStartBlinking(void (*func)()) {
+    onStartBlink = func;
+}
+
+void SmartTrafficLight::onStopBlinking(void (*func)()) {
+    onStopBlink = func;
+}
+
+void SmartTrafficLight::onAlterState(void (*func)()) {
+    onAlter = func;
+}
+
 // Getter functions
 
 const char* SmartTrafficLight::getCurrentState() {
@@ -316,8 +354,6 @@ const char* SmartTrafficLight::getCurrentState() {
 const uint8_t SmartTrafficLight::getPinOn() {
     return pinOn;
 }
-
-
 
 // --------------- CONSTANTS ---------------
 
@@ -332,6 +368,8 @@ const uint8_t SmartTrafficLight::getPinOn() {
 
 #define MIN_GREEN_TIME (2000)
 
+
+// --------------- CALLBACK FUNCTIONS ---------------
  
 void print_turning_green() {
 	Serial.println("Turning green...");
@@ -343,6 +381,22 @@ void print_turning_yellow() {
 
 void print_turning_red() {
 	Serial.println("Turning red...");
+}
+
+void print_enable() {
+	Serial.println("Enabling...");
+}
+
+void print_disable() {
+	Serial.println("Desabling...");
+}
+
+void print_start_blinking() {
+	Serial.println("Starting blinking...");
+}
+
+void print_stop_blinking() {
+	Serial.println("Stopping blinking...");
 }
 
 
@@ -359,6 +413,10 @@ void setup() {
     trafficLight.onTurnGreen(print_turning_green);
     trafficLight.onTurnYellow(print_turning_yellow);
   	trafficLight.onTurnRed(print_turning_red);
+  	trafficLight.onEnable(print_enable);
+  	trafficLight.onDisable(print_disable);
+  	trafficLight.onStartBlinking(print_start_blinking);
+  	trafficLight.onStopBlinking(print_stop_blinking);
   	
   	trafficLight.begin();
     trafficLight.enable();
@@ -375,7 +433,7 @@ void loop(){
   	else if (millis() >= 5000) {
         trafficLight.disable();
     }
-    else if (millis() >= 10000) {
+	else if (millis() >= 10000) {
         trafficLight.enable();
     }
 }

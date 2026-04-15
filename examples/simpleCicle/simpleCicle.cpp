@@ -14,6 +14,8 @@
 
 #define MIN_GREEN_TIME (2000)
 
+
+// --------------- CALLBACK FUNCTIONS ---------------
  
 void print_turning_green() {
 	Serial.println("Turning green...");
@@ -25,6 +27,22 @@ void print_turning_yellow() {
 
 void print_turning_red() {
 	Serial.println("Turning red...");
+}
+
+void print_enable() {
+	Serial.println("Enabling...");
+}
+
+void print_disable() {
+	Serial.println("Desabling...");
+}
+
+void print_start_blinking() {
+	Serial.println("Starting blinking...");
+}
+
+void print_stop_blinking() {
+	Serial.println("Stopping blinking...");
 }
 
 
@@ -41,6 +59,10 @@ void setup() {
     trafficLight.onTurnGreen(print_turning_green);
     trafficLight.onTurnYellow(print_turning_yellow);
   	trafficLight.onTurnRed(print_turning_red);
+  	trafficLight.onEnable(print_enable);
+  	trafficLight.onDisable(print_disable);
+  	trafficLight.onStartBlinking(print_start_blinking);
+  	trafficLight.onStopBlinking(print_stop_blinking);
   	
   	trafficLight.begin();
     trafficLight.enable();

@@ -63,6 +63,13 @@ class SmartTrafficLight {
         void (*onYellow)() = nullptr;
         void (*onRed)() = nullptr;
 
+        void (*onEn)() = nullptr;
+        void (*onDis)() = nullptr;
+        void (*onStartBlink)() = nullptr;
+        void (*onStopBlink)() = nullptr;
+
+        void (*onAlter)() = nullptr;
+
     public:
         SmartTrafficLight();
 
@@ -103,6 +110,13 @@ class SmartTrafficLight {
         void onTurnGreen(void (*func)());
         void onTurnYellow(void (*func)());
         void onTurnRed(void (*func)());
+        
+        void onEnable(void (*func)());
+        void onDisable(void (*func)());
+        void onStartBlinking(void (*func)());
+        void onStopBlinking(void (*func)());
+
+        void onAlterState(void (*func)());
 
         const char* getCurrentState();
         const uint8_t getPinOn();
