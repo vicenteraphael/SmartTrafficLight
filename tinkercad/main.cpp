@@ -1,4 +1,4 @@
-#include <Arduino.h>
+#include <Arduino.h> // Remove this when running on tinkercad
 
 #define NO_PIN (255)
 #define NO_INTERVAL (0)
@@ -7,6 +7,24 @@
 #define DEFAULT_YELLOW_INTERVAL (2000)
 #define DEFAULT_RED_INTERVAL (5000)
 #define DEFAULT_MIN_GREEN_TIME (5000)
+
+#define BLINKING_INTERVAL (1000)
+
+enum State {
+    GREEN,
+    YELLOW,
+    RED,
+    BLINKING,
+    DISABLED
+};
+
+const char stringStates[][9] = {
+    "GREEN",
+    "YELLOW",
+    "RED",
+    "BLINKING",
+    "DISABLED",
+};
 
 class SmartTrafficLight {
     private:
@@ -20,22 +38,26 @@ class SmartTrafficLight {
         unsigned long redInterval = DEFAULT_RED_INTERVAL;
         unsigned long minGreenTime = DEFAULT_MIN_GREEN_TIME;
 
-        bool disabled = false;
-
         bool begun = false;
         bool pressed = false;
         unsigned long lastTimeTransition = 0;
-        uint8_t pinOn = NO_PIN;
+
+        State state = GREEN;
+        uint8_t pinOn;
         
         void assertBegun();
+
+        void callEventFunctions();
+
         void handleButton();
         void handleGreen();
         void handleYellow();
         void handleRed();
 
-        void handleDisabled();
+        void handleBlinking();
 
         void (*onGreen)() = nullptr;
+        void (*onYellow)() = nullptr;
         void (*onRed)() = nullptr;
 
     public:
@@ -62,18 +84,25 @@ class SmartTrafficLight {
             unsigned long min_g_time = DEFAULT_MIN_GREEN_TIME
         );
 
-        void begin(bool mode);
+        void begin();
 
         void update();
 
         void turnOn(const uint8_t led_pin);
         void turnOff();
         
-        void disable();
+        void startBlinking();
+        void stopBlinking();
+
         void enable();
+        void disable();
 
         void onTurnGreen(void (*func)());
+        void onTurnYellow(void (*func)());
         void onTurnRed(void (*func)());
+
+        const char* getCurrentState();
+        const uint8_t getPinOn();
 };
 
 
@@ -113,7 +142,7 @@ void SmartTrafficLight::assertBegun() {
     }
 }
 
-void SmartTrafficLight::begin(bool mode) {
+void SmartTrafficLight::begin() {
     // Safety verification
     if (greenPin == NO_PIN || yellowPin == NO_PIN || redPin == NO_PIN) {
         assertBegun();
@@ -126,23 +155,27 @@ void SmartTrafficLight::begin(bool mode) {
     pinMode(redPin, OUTPUT);
     
     if (buttonPin != NO_PIN) pinMode(buttonPin, INPUT_PULLUP);
-  
-  	mode ? enable() : disable();
+
+    state = DISABLED;
 }
 
 
-// ================================ TRAFFIC LIGHT CONTROL ================================
+// ================================ TRAFFIC LIGHT HANDLING ================================
+
+void SmartTrafficLight::callEventFunctions() {
+    if (state == GREEN && onGreen) onGreen();
+    else if (state == YELLOW && onYellow) onYellow();
+    else if (state == RED && onRed) onRed();
+}
 
 void SmartTrafficLight::turnOn(const uint8_t led_pin){
     assertBegun();
 
     lastTimeTransition = millis();
 
-    if (pinOn != NO_PIN)
-        digitalWrite(pinOn, LOW);
-  
-  	if (led_pin == greenPin && onGreen) onGreen();
-  	else if (led_pin == redPin && onRed) onRed();
+    if (pinOn != NO_PIN) digitalWrite(pinOn, LOW);
+    
+    callEventFunctions();
 
     digitalWrite(led_pin, HIGH);
 
@@ -161,70 +194,130 @@ void SmartTrafficLight::turnOff() {
 void SmartTrafficLight::handleButton() {
     pressed = !digitalRead(buttonPin);
 
-    if (pressed && (millis() - lastTimeTransition >= minGreenTime)) turnOn(yellowPin);
+    if (pressed && (millis() - lastTimeTransition >= minGreenTime)) {
+        state = YELLOW;
+        turnOn(yellowPin);
+    }
 }
 
 void SmartTrafficLight::handleGreen() {
     if (buttonPin != NO_PIN) handleButton();
 
-  if (millis() - lastTimeTransition >= greenInterval) turnOn(yellowPin);
+    if (millis() - lastTimeTransition >= greenInterval) {
+        state = YELLOW;
+        turnOn(yellowPin);
+    }
 }
 
 void SmartTrafficLight::handleYellow() {
-    if (millis() - lastTimeTransition >= yellowInterval) turnOn(redPin);
+    if (millis() - lastTimeTransition >= yellowInterval) {
+        state = RED;
+        turnOn(redPin);
+    }
 }
 
 void SmartTrafficLight::handleRed() {
-    if (millis() - lastTimeTransition >= redInterval) turnOn(greenPin);
+    if (millis() - lastTimeTransition >= redInterval) {
+        state = GREEN;
+        turnOn(greenPin);
+    } 
 }
 
-void SmartTrafficLight::handleDisabled() {
+void SmartTrafficLight::handleBlinking() {
     if (pinOn == yellowPin) {
-        if (millis() - lastTimeTransition >= yellowInterval) turnOff();
+        if (millis() - lastTimeTransition >= BLINKING_INTERVAL) turnOff();
     }
     else {
-        if (millis() - lastTimeTransition >= yellowInterval) turnOn(yellowPin);
+        if (millis() - lastTimeTransition >= BLINKING_INTERVAL) turnOn(yellowPin);
     }
 }
+
+
+// ================================ STATE MACHINE ================================
 
 void SmartTrafficLight::update() {
     assertBegun();
-    if (disabled)
-        handleDisabled();
 
-    else if (pinOn == greenPin)
-        handleGreen();
+    switch (state) {
+        case GREEN:
+            handleGreen();
+            break;
+        
+        case YELLOW:
+            handleYellow();
+            break;
 
-    else if (pinOn == yellowPin)
-        handleYellow();
+        case RED:
+            handleRed();
+            break;
 
-    else if (pinOn == redPin)
-        handleRed();
+        case BLINKING:
+            handleBlinking();
+    }
 }
 
-void SmartTrafficLight::disable() {
+
+// ================================ PUBLIC METHODS ================================
+
+// Toggle mode functions
+
+void SmartTrafficLight::startBlinking() {
     assertBegun();
-    if (disabled) return;
+    if (state == BLINKING) return;
     
-    disabled = true;
+    state = BLINKING;
     turnOn(yellowPin);
+}
+
+void SmartTrafficLight::stopBlinking() {
+    assertBegun();
+    if (state != BLINKING) return;
+    
+    state = GREEN;
+    turnOn(greenPin);
 }
 
 void SmartTrafficLight::enable() {
     assertBegun();
-    if (!disabled && pinOn != NO_PIN) return;
+    if (state != DISABLED) return;
 
-    disabled = false;
+    state = GREEN;
   	turnOn(greenPin);
 }
+
+void SmartTrafficLight::disable() {
+    assertBegun();
+    if (state == DISABLED) return;
+    
+    state = DISABLED;
+    turnOff();
+}
+
+// Event functions
 
 void SmartTrafficLight::onTurnGreen(void (*func)()) {
     onGreen = func;
 }
 
+void SmartTrafficLight::onTurnYellow(void (*func)()) {
+    onYellow = func;
+}
+
 void SmartTrafficLight::onTurnRed(void (*func)()) {
     onRed = func;
 }
+
+// Getter functions
+
+const char* SmartTrafficLight::getCurrentState() {
+    return stringStates[state];
+}
+
+const uint8_t SmartTrafficLight::getPinOn() {
+    return pinOn;
+}
+
+
 
 // --------------- CONSTANTS ---------------
 
@@ -239,13 +332,17 @@ void SmartTrafficLight::onTurnRed(void (*func)()) {
 
 #define MIN_GREEN_TIME (2000)
 
-
-void print_turning_red() {
-	Serial.println("Turning red...");
-}
  
 void print_turning_green() {
 	Serial.println("Turning green...");
+}
+
+void print_turning_yellow() {
+	Serial.println("Turning yellow...");
+}
+
+void print_turning_red() {
+	Serial.println("Turning red...");
 }
 
 
@@ -259,12 +356,26 @@ void setup() {
   	trafficLight.attach(GREEN_PIN, YELLOW_PIN, RED_PIN, BUTTON_PIN);
     trafficLight.setIntervals(GREEN_INTERVAL, YELLOW_INTERVAL, RED_INTERVAL, MIN_GREEN_TIME);
       
+    trafficLight.onTurnGreen(print_turning_green);
+    trafficLight.onTurnYellow(print_turning_yellow);
   	trafficLight.onTurnRed(print_turning_red);
-  	trafficLight.onTurnGreen(print_turning_green);
   	
-  	trafficLight.begin(true);
+  	trafficLight.begin();
+    trafficLight.enable();
 }
 
 void loop(){
     trafficLight.update();
+    if (millis() >= 15000) {
+        trafficLight.stopBlinking();
+    }
+    else if (millis() >= 10000) {
+        trafficLight.startBlinking();
+    }
+  	else if (millis() >= 5000) {
+        trafficLight.disable();
+    }
+    else if (millis() >= 10000) {
+        trafficLight.enable();
+    }
 }

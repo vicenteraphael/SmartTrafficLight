@@ -14,13 +14,17 @@
 
 #define MIN_GREEN_TIME (2000)
 
-
-void print_turning_red() {
-	Serial.println("Turning red...");
-}
  
 void print_turning_green() {
 	Serial.println("Turning green...");
+}
+
+void print_turning_yellow() {
+	Serial.println("Turning yellow...");
+}
+
+void print_turning_red() {
+	Serial.println("Turning red...");
 }
 
 
@@ -34,12 +38,26 @@ void setup() {
   	trafficLight.attach(GREEN_PIN, YELLOW_PIN, RED_PIN, BUTTON_PIN);
     trafficLight.setIntervals(GREEN_INTERVAL, YELLOW_INTERVAL, RED_INTERVAL, MIN_GREEN_TIME);
       
+    trafficLight.onTurnGreen(print_turning_green);
+    trafficLight.onTurnYellow(print_turning_yellow);
   	trafficLight.onTurnRed(print_turning_red);
-  	trafficLight.onTurnGreen(print_turning_green);
   	
-  	trafficLight.begin(true);
+  	trafficLight.begin();
+    trafficLight.enable();
 }
 
 void loop(){
     trafficLight.update();
+    if (millis() >= 15000) {
+        trafficLight.stopBlinking();
+    }
+    else if (millis() >= 10000) {
+        trafficLight.startBlinking();
+    }
+  	else if (millis() >= 5000) {
+        trafficLight.disable();
+    }
+	else if (millis() >= 10000) {
+        trafficLight.enable();
+    }
 }

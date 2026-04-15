@@ -11,6 +11,24 @@
 #define DEFAULT_RED_INTERVAL (5000)
 #define DEFAULT_MIN_GREEN_TIME (5000)
 
+#define BLINKING_INTERVAL (1000)
+
+enum State {
+    GREEN,
+    YELLOW,
+    RED,
+    BLINKING_YELLOW,
+    DISABLED
+};
+
+const char stringStates[][16] = {
+    "GREEN",
+    "YELLOW",
+    "RED",
+    "BLINKING_YELLOW",
+    "DISABLED",
+};
+
 class SmartTrafficLight {
     private:
         uint8_t greenPin = NO_PIN;
@@ -23,22 +41,26 @@ class SmartTrafficLight {
         unsigned long redInterval = DEFAULT_RED_INTERVAL;
         unsigned long minGreenTime = DEFAULT_MIN_GREEN_TIME;
 
-        bool disabled = false;
-
         bool begun = false;
         bool pressed = false;
         unsigned long lastTimeTransition = 0;
-        uint8_t pinOn = NO_PIN;
+
+        State state = GREEN;
+        uint8_t pinOn;
         
         void assertBegun();
+
+        void callEventFunctions();
+
         void handleButton();
         void handleGreen();
         void handleYellow();
         void handleRed();
 
-        void handleDisabled();
+        void handleBlinking();
 
         void (*onGreen)() = nullptr;
+        void (*onYellow)() = nullptr;
         void (*onRed)() = nullptr;
 
     public:
@@ -65,18 +87,25 @@ class SmartTrafficLight {
             unsigned long min_g_time = DEFAULT_MIN_GREEN_TIME
         );
 
-        void begin(bool mode);
+        void begin();
 
         void update();
 
         void turnOn(const uint8_t led_pin);
         void turnOff();
         
-        void disable();
+        void startBlinking();
+        void stopBlinking();
+
         void enable();
+        void disable();
 
         void onTurnGreen(void (*func)());
+        void onTurnYellow(void (*func)());
         void onTurnRed(void (*func)());
+
+        const char* getCurrentState();
+        const uint8_t getPinOn();
 };
 
 #endif
