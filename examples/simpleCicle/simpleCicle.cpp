@@ -45,6 +45,10 @@ void print_stop_blinking() {
 	Serial.println("Stopping blinking...");
 }
 
+void altering_state() {
+	Serial.println("Altering state...");
+}
+
 
 // --------------- PROGRAM ---------------
 
@@ -63,6 +67,7 @@ void setup() {
   	trafficLight.onDisable(print_disable);
   	trafficLight.onStartBlinking(print_start_blinking);
   	trafficLight.onStopBlinking(print_stop_blinking);
+    trafficLight.onAlterState(altering_state);
   	
   	trafficLight.begin();
     trafficLight.enable();
@@ -78,8 +83,5 @@ void loop(){
     }
   	else if (millis() >= 5000) {
         trafficLight.disable();
-    }
-	else if (millis() >= 10000) {
-        trafficLight.enable();
     }
 }

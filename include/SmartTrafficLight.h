@@ -14,19 +14,19 @@
 #define BLINKING_INTERVAL (1000)
 
 enum State {
-    GREEN,
-    YELLOW,
-    RED,
-    BLINKING_YELLOW,
-    DISABLED
+    GREEN_STATE,
+    YELLOW_STATE,
+    RED_STATE,
+    BLINKING_YELLOW_STATE,
+    DISABLED_STATE
 };
 
-const char stringStates[][16] = {
-    "GREEN",
-    "YELLOW",
-    "RED",
-    "BLINKING_YELLOW",
-    "DISABLED",
+const char stringStates[][22] = {
+    "GREEN_STATE",
+    "YELLOW_STATE",
+    "RED_STATE",
+    "BLINKING_YELLOW_STATE",
+    "DISABLED_STATE",
 };
 
 class SmartTrafficLight {
@@ -45,30 +45,30 @@ class SmartTrafficLight {
         bool pressed = false;
         unsigned long lastTimeTransition = 0;
 
-        State state = GREEN;
-        uint8_t pinOn;
+        State state = DISABLED_STATE;
+        uint8_t pinOn = NO_PIN;
         
         void assertBegun();
 
-        void callEventFunctions();
+        void turnOn(const uint8_t led_pin);
+        void turnOff();
 
         void handleButton();
         void handleGreen();
         void handleYellow();
         void handleRed();
-
         void handleBlinking();
 
         void (*onGreen)() = nullptr;
         void (*onYellow)() = nullptr;
         void (*onRed)() = nullptr;
-
         void (*onEn)() = nullptr;
         void (*onDis)() = nullptr;
         void (*onStartBlink)() = nullptr;
         void (*onStopBlink)() = nullptr;
-
         void (*onAlter)() = nullptr;
+
+        void goTo(State state);
 
     public:
         SmartTrafficLight();
@@ -97,25 +97,21 @@ class SmartTrafficLight {
         void begin();
 
         void update();
-
-        void turnOn(const uint8_t led_pin);
-        void turnOff();
         
         void startBlinking();
         void stopBlinking();
-
         void enable();
         void disable();
+        void turnGreen();
+        void turnRed();
 
         void onTurnGreen(void (*func)());
         void onTurnYellow(void (*func)());
         void onTurnRed(void (*func)());
-        
         void onEnable(void (*func)());
         void onDisable(void (*func)());
         void onStartBlinking(void (*func)());
         void onStopBlinking(void (*func)());
-
         void onAlterState(void (*func)());
 
         const char* getCurrentState();
