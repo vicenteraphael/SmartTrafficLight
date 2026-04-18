@@ -1,6 +1,42 @@
+#######################################
+# Syntax Coloring Map SmartTrafficLight
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
 SmartTrafficLight	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+attach	KEYWORD2
 begin	KEYWORD2
 update	KEYWORD2
-attach	KEYWORD2
-setIntervals    KEYWORD2
+startBlinking	KEYWORD2
+stopBlinking	KEYWORD2
+enable	KEYWORD2
+disable	KEYWORD2
+turnGreen	KEYWORD2
+turnRed	KEYWORD2
+onTurnGreen	KEYWORD2
+onTurnYellow	KEYWORD2
+onTurnRed	KEYWORD2
+onEnable	KEYWORD2
+onDisable	KEYWORD2
+onStartBlinking	KEYWORD2
+onStopBlinking	KEYWORD2
+onAlterState	KEYWORD2
+getCurrentState	KEYWORD2
+getPinOn	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
 NO_PIN	LITERAL1
+NO_INTERVAL	LITERAL1
+DEFAULT_GREEN_INTERVAL	LITERAL1
+DEFAULT_YELLOW_INTERVAL	LITERAL1
+DEFAULT_RED_INTERVAL	LITERAL1
+DEFAULT_MIN_GREEN_TIME	LITERAL1
+BLINKING_INTERVAL	LITERAL1

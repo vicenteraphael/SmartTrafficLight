@@ -151,6 +151,9 @@ void SmartTrafficLight::update() {
 
         case BLINKING_YELLOW_STATE:
             handleBlinking();
+
+        case DISABLED_STATE:
+            break;
     }
 }
 
