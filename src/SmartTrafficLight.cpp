@@ -163,20 +163,6 @@ void SmartTrafficLight::update() {
 
 // Alter state functions
 
-void SmartTrafficLight::startBlinking() {
-    assertBegun();
-    if (state == BLINKING_YELLOW_STATE) return;
-    
-    goTo(BLINKING_YELLOW_STATE);
-}
-
-void SmartTrafficLight::stopBlinking() {
-    assertBegun();
-    if (state != BLINKING_YELLOW_STATE) return;
-    
-    goTo(GREEN_STATE);
-}
-
 void SmartTrafficLight::enable() {
     assertBegun();
     if (state != DISABLED_STATE) return;
@@ -189,6 +175,20 @@ void SmartTrafficLight::disable() {
     if (state == DISABLED_STATE) return;
 
     goTo(DISABLED_STATE);
+}
+
+void SmartTrafficLight::startBlinking() {
+    assertBegun();
+    if (state == BLINKING_YELLOW_STATE) return;
+    
+    goTo(BLINKING_YELLOW_STATE);
+}
+
+void SmartTrafficLight::stopBlinking() {
+    assertBegun();
+    if (state != BLINKING_YELLOW_STATE) return;
+    
+    goTo(GREEN_STATE);
 }
 
 void SmartTrafficLight::turnGreen() {
@@ -239,7 +239,11 @@ void SmartTrafficLight::onAlterState(void (*func)()) {
 
 // Getter functions
 
-const char* SmartTrafficLight::getCurrentState() {
+State SmartTrafficLight::getState() {
+    return state;
+}
+
+const char* SmartTrafficLight::getStringState() {
     return stringStates[state];
 }
 

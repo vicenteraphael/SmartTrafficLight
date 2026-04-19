@@ -98,10 +98,10 @@ class SmartTrafficLight {
 
         void update();
         
-        void startBlinking();
-        void stopBlinking();
         void enable();
         void disable();
+        void startBlinking();
+        void stopBlinking();
         void turnGreen();
         void turnRed();
 
@@ -114,7 +114,8 @@ class SmartTrafficLight {
         void onStopBlinking(void (*func)());
         void onAlterState(void (*func)());
 
-        const char* getCurrentState();
+        State getState();
+        const char* getStringState();
         const uint8_t getPinOn();
 };
 
