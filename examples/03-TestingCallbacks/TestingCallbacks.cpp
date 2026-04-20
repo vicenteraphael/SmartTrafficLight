@@ -33,7 +33,7 @@ void print_enable() {
 }
 
 void print_disable() {
-	Serial.println("Desabling...");
+	Serial.println("Disabling...");
 }
 
 void print_start_blinking() {

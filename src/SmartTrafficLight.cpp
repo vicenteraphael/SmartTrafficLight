@@ -29,7 +29,7 @@ SmartTrafficLight::SmartTrafficLight(const uint8_t g_pin, const uint8_t y_pin, c
 void SmartTrafficLight::assertBegun() {
     if (!begun) {
         Serial.begin(9600);
-        Serial.println("Fatal: unitialized...");
+        Serial.println("Fatal: uninitialized...");
         Serial.println("Use attach() to configure the pins");
         Serial.println("Use setIntervals() to customize the traffic light intervals");
         Serial.println("Use begin() to start the traffic light");
@@ -194,7 +194,6 @@ void SmartTrafficLight::stopBlinking() {
 void SmartTrafficLight::turnGreen() {
     assertBegun();
     if (state == RED_STATE) goTo(YELLOW_STATE);
-    else if (state == YELLOW_STATE) goTo(GREEN_STATE);
 }
 
 void SmartTrafficLight::turnRed() {
