@@ -96,6 +96,13 @@ Typical usage flow:
 5. (Optional) Enable the system with enable()
 6. Call update() continuously inside loop()
 
+Common mistakes:
+
+- Forgetting to call `begin()`
+- Forgetting to call `enable()`
+- Not calling `update()` inside `loop()`
+- Calling `attach()` after `begin()`
+- Forgetting to set the pins in the constructor or `attach()`
 
 ---
 
@@ -119,7 +126,7 @@ Creates an instance of `SmartTrafficLight` and, optionally, configures the pins 
 SmartTrafficLight() = default
 SmartTrafficLight(const uint8_t g_pin, const uint8_t y_pin, const uint8_t r_pin, const uint8_t b_pin = NO_PIN)
 ```
-
+> Note: `NO_PIN` is an internal macro with value `255`, which literally means "no pin"
 
 **Parameters:**
 
@@ -199,6 +206,7 @@ Configures the pins to be used. Can be called to configure the pins instead of [
 void attach(const uint8_t g_pin, const uint8_t y_pin, const uint8_t r_pin, const uint8_t b_pin = NO_PIN)
 ```
 
+> Note: `NO_PIN` is an internal macro with value `255`, which literally means "no pin"
 
 **Parameters:**
 
@@ -450,6 +458,17 @@ enum State {
     DISABLED_STATE // System is inactive (out of service)
 };
 ```
+
+In practice, the states can be represented by the following schema:
+
+![SmartTrafficLight | Finite State Machine](/docs/img/fsm.png)
+
+> Solid line   = automatic transition (TIMEOUT) <br>
+> Dashed line  = method call (user-triggered)
+
+
+> `ANY STATE` → `BLINKING` (`startBlinking()`) <br>
+> `ANY STATE` → `DISABLED` (`disable()`)
 
 By default, the system starts on `DISABLED_STATE`
 
@@ -982,8 +1001,14 @@ void loop() {
 
 ## Event functions and callbacks
 
+The system has various built-in event functions that allow attaching custom callbacks gets triggered after some specific changes of state happens. These functions should be called once and only accept pointers to functions or lambda functions (which requires C++11 support). If an event function is not set up, no callbacks are dispatched by when the specific event changes.
+
 
 ### `onTurnGreen()`
+
+**Description:**
+
+Dispatches its callback function when the state is changed to `GREEN_STATE`, that is, when the traffic light turns green.
 
 
 **Definition:**
@@ -1046,6 +1071,11 @@ void loop() {
 
 
 ### `onTurnYellow()`
+
+
+**Description:**
+
+Dispatches its callback function when the state is changed to `YELLOW_STATE`, that is, when the traffic light turns yellow.
 
 
 **Definition:**
@@ -1112,6 +1142,11 @@ void loop() {
 ### `onTurnRed()`
 
 
+**Description:**
+
+Dispatches its callback function when the state is changed to `RED_STATE`, that is, when the traffic light turns red.
+
+
 **Definition:**
 
 ```cpp copy
@@ -1173,6 +1208,11 @@ void loop() {
 
 
 ### `onEnable()`
+
+
+**Description:**
+
+Dispatches its callback function when the [`enable()`](#enable) method is called; that is, when the state is changed from `DISABLED_STATE` to `GREEN_STATE`.
 
 
 **Definition:**
@@ -1242,6 +1282,11 @@ void loop() {
 ### `onDisable()`
 
 
+**Description:**
+
+Dispatches its callback function when the state is changed to `DISABLED_STATE`, that is, when the [`disable()`](#disable) method is called.
+
+
 **Definition:**
 
 
@@ -1308,6 +1353,11 @@ void loop() {
 ### `onStartBlinking()`
 
 
+**Description:**
+
+Dispatches its callback function when the state is changed to `BLINKING_YELLOW_STATE`, that is, when the [`startBlinking()`](#startblinking) method is called.
+
+
 **Definition:**
 
 ```cpp copy
@@ -1368,6 +1418,11 @@ void loop() {
 
 
 ### `onStopBlinking()`
+
+
+**Description:**
+
+Dispatches its callback function when the state is changed from `BLINKING_YELLOW_STATE` to `GREEN_STATE`; that is, when the [`stopBlinking()`](#stopblinking) method is called.
 
 
 **Definition:**
@@ -1433,6 +1488,11 @@ void loop() {
 
 
 ### `onAlterState()`
+
+
+**Description:**
+
+Dispatches its callback function when the current state is changed (to any other state).
 
 
 **Definition:**
@@ -1519,7 +1579,7 @@ void loop() {
 SmartTrafficLight trafficLight{};
  
 void print_green_yellow_red() {
-    switch(trafficLight.getState) {
+    switch(trafficLight.getState()) {
         case GREEN_STATE:
             Serial.println("Turning Green...");
             break;
@@ -1537,7 +1597,7 @@ void print_enable() {
 }
 
 void print_disable() {
-	Serial.println("Desabling...");
+	Serial.println("Disabling...");
 }
 
 void print_start_blinking() {
@@ -1558,7 +1618,7 @@ void setup() {
   	trafficLight.onDisable(print_disable);
   	trafficLight.onStartBlinking(print_start_blinking);
   	trafficLight.onStopBlinking(print_stop_blinking);
-    trafficLight.onAlterState(print_green_yellow_red)
+    trafficLight.onAlterState(print_green_yellow_red);
   	
   	trafficLight.begin();
     trafficLight.enable();
