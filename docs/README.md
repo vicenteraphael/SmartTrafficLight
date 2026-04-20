@@ -16,7 +16,7 @@ control of different states and the implementation of event-driven behaviour suc
 4. Include it in your code:
 
     ```cpp copy
-    #include <SmartTrafficLight>
+    #include <SmartTrafficLight.h>
     ```
 
 # Circuit
