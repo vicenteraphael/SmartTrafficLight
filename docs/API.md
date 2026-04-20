@@ -1,4 +1,4 @@
-# API Reference - SmartTrafficLight
+# API Reference - SmartTrafficLight methods
 
 
 ## Table of contents
@@ -10,7 +10,7 @@
 2. [Initialization and update](#initialization-and-update)
     - [`begin()`](#begin)
     - [`udpate()`](#update)
-3. [Alter State](#alter-state-1)
+3. [Alter State](#alter-state)
     - [`enable()`](#enable)
     - [`disable()`](#disable)
     - [`startBlinking()`](#startblinking)
@@ -23,7 +23,7 @@
     - [`getStringState()`](#getstringstate)
 5. [Event functions and callbacks](#event-functions-and-callbacks)
     - [`onTurnGreen()`](#onturngreen)
-    - [`onTurnYellow()`](#onturntellow)
+    - [`onTurnYellow()`](#onturnyellow)
     - [`onTurnRed()`](#onturnred)
     - [`onEnable()`](#onenable)
     - [`onDisable()`](#ondisable)
@@ -58,6 +58,7 @@ SmartTrafficLight(const uint8_t g_pin, const uint8_t y_pin, const uint8_t r_pin,
 
 **Parameters:**
 
+- `void` or:
 - `g_pin`: Digital pin for the green LED
 - `y_pin`: Digital pin for the yellow LED
 - `r_pin`: Digital pin for the red LED
@@ -78,7 +79,7 @@ SmartTrafficLight(12, 8, 7, 2);
 
 In the first case, the constructor will only create an instance of SmartTrafficLight and return it. Therefore, the pins configuration will need to be done by using [`attach()`](#attach).
 
-In the second case, the pins are being configured, except for the button, that can be passed in the third case.
+In the second case, the pins are being configured, except for the button, that is passed on in the third case.
 
 
 **Example:**
@@ -122,9 +123,9 @@ void loop() {}
 
 **Description:**
 
-⚠️ Required
+⚠️ This method must be called if, and only if, the pins weren't configured in the constructor, aka [`SmartTrafficLight()`]((#smarttrafficlight))
 
-Configures the pins to be used. Can be called to configure the pins instead of `smartTrafficLight()`.
+Configures the pins to be used. Can be called to configure the pins instead of [`SmartTrafficLight()`](#smarttrafficlight)
 
 
 **Definition:**
@@ -251,7 +252,7 @@ void loop() {}
 
 **Description:**
 
-⚠️ Required
+⚠️ This method must be called before using the traffic light
 
 Initializes the system and checks if the pins were configured succesfully. If not, the following message is displayed on the serial monitor and the program is freezed:
 
@@ -262,7 +263,7 @@ Use setIntervals() to customize the traffic light intervals
 Use begin() to start the traffic light
 ```
 
-If, by chance, `update()` is not called, the same will occurr when a public function is called.
+If, by chance, `begin()` is not called before for initializatoin, the same message and behaviour will occurr when a public method is called.
 
 
 **Definition:**
@@ -318,7 +319,7 @@ void loop() {}
 
 **Description:**
 
-⚠️ Required
+⚠️ This method must be called as often as possible in order for the traffic light logic to work
 
 Updates the current state of the traffic light FSM using millis(). Needs to be continously called inside `loop()`
 
@@ -375,7 +376,7 @@ void loop() {
 
 ## Alter state
 
-The following functions allow altering the current state of the traffic light FSM, without interrupting its behaviour. The states are:
+The methods in this section allow changing the current state of the traffic light FSM without interrupting its behaviour. The states are:
 
 - `GREEN_STATE`
 - `YELLOW_STATE`
@@ -384,127 +385,6 @@ The following functions allow altering the current state of the traffic light FS
 - `DISABLED_STATE`
 
 By default, the system starts on `DISABLED_STATE`
-
-
----
-
-
-### `startBlinking()`
-
-
-**Description:**
-
-Changes the current state to `BLINKING_YELLOW_STATE`, also known as night or nocturnal mode. 
-
-
-**Definition:**
-
-```cpp copy
-void startBlinking()
-```
-
-
-**Parameters:**
-
-- `void`
-
-
-**Returns:**
-
-- `void`
-
-
-**Syntax:**
-
-```cpp copy
-trafficLight.startBlinking();
-```
-
-
-**Example:**
-
-```cpp copy
-#include <SmartTrafficLight.h>
-
-#define GREEN_PIN 12
-#define YELLOW_PIN 11
-#define RED_PIN 10
-#define BUTTON_PIN 9
-
-SmartTrafficLight trafficLight{};
-
-void setup() {
-    trafficLight.attach(GREEN_PIN, YELLOW_PIN, RED_PIN, BUTTON_PIN);
-    trafficLight.begin();
-    trafficLight.startBlinking();
-}
-
-void loop() {
-    trafficLight.update();
-}
-```
-
-
----
-
-
-### `stopBlinking()`
-
-
-**Description:**
-
-Changes the current state from `BLINKING_YELLOW_STATE` to `GREEN_STATE`, stopping the blinking mode.
-
-
-**Definition:**
-
-```cpp copy
-void stopBlinking()
-```
-
-
-**Parameters:**
-
-- `void`
-
-
-**Returns:**
-
-- `void`
-
-
-**Syntax:**
-
-```cpp copy
-trafficLight.stopBlinking();
-```
-
-
-**Example:**
-
-```cpp copy
-#include <SmartTrafficLight.h>
-
-#define GREEN_PIN 12
-#define YELLOW_PIN 11
-#define RED_PIN 10
-#define BUTTON_PIN 9
-
-SmartTrafficLight trafficLight{};
-
-void setup() {
-    trafficLight.attach(GREEN_PIN, YELLOW_PIN, RED_PIN, BUTTON_PIN);
-    trafficLight.begin();
-    trafficLight.startBlinking();
-}
-
-void loop() {
-    trafficLight.update();
-    if (millis() >= 10000) { // stops blinking after 10 seconds
-        trafficLight.stopBlinking();
-    }
-}
-```
 
 
 ---
@@ -625,6 +505,127 @@ void loop() {
     trafficLight.update();
     if (millis() >= 10000) {
         trafficLight.disable(); // Disables the traffic light after 10 seconds of service
+    }
+}
+```
+
+
+---
+
+
+### `startBlinking()`
+
+
+**Description:**
+
+Changes the current state to `BLINKING_YELLOW_STATE`, also known as night or nocturnal mode. 
+
+
+**Definition:**
+
+```cpp copy
+void startBlinking()
+```
+
+
+**Parameters:**
+
+- `void`
+
+
+**Returns:**
+
+- `void`
+
+
+**Syntax:**
+
+```cpp copy
+trafficLight.startBlinking();
+```
+
+
+**Example:**
+
+```cpp copy
+#include <SmartTrafficLight.h>
+
+#define GREEN_PIN 12
+#define YELLOW_PIN 11
+#define RED_PIN 10
+#define BUTTON_PIN 9
+
+SmartTrafficLight trafficLight{};
+
+void setup() {
+    trafficLight.attach(GREEN_PIN, YELLOW_PIN, RED_PIN, BUTTON_PIN);
+    trafficLight.begin();
+    trafficLight.startBlinking();
+}
+
+void loop() {
+    trafficLight.update();
+}
+```
+
+
+---
+
+
+### `stopBlinking()`
+
+
+**Description:**
+
+Changes the current state from `BLINKING_YELLOW_STATE` to `GREEN_STATE`, stopping the blinking mode.
+
+
+**Definition:**
+
+```cpp copy
+void stopBlinking()
+```
+
+
+**Parameters:**
+
+- `void`
+
+
+**Returns:**
+
+- `void`
+
+
+**Syntax:**
+
+```cpp copy
+trafficLight.stopBlinking();
+```
+
+
+**Example:**
+
+```cpp copy
+#include <SmartTrafficLight.h>
+
+#define GREEN_PIN 12
+#define YELLOW_PIN 11
+#define RED_PIN 10
+#define BUTTON_PIN 9
+
+SmartTrafficLight trafficLight{};
+
+void setup() {
+    trafficLight.attach(GREEN_PIN, YELLOW_PIN, RED_PIN, BUTTON_PIN);
+    trafficLight.begin();
+    trafficLight.startBlinking();
+}
+
+void loop() {
+    trafficLight.update();
+    if (millis() >= 10000) { // stops blinking after 10 seconds
+        trafficLight.stopBlinking();
     }
 }
 ```
@@ -775,7 +776,7 @@ Returns the current HIGH LED pin. If no pin is HIGH, returns 255
 **Definition:**
 
 ```cpp copy
-void getPinOn()
+const uint8_t getPinOn()
 ```
 
 
@@ -786,20 +787,13 @@ void getPinOn()
 
 **Returns:**
 
-- `void`
+- `const uint8_t`: current HIGH LED pin. If no pin is HIGH, returns 255
 
 
 **Syntax:**
 
 ```cpp copy
 trafficLight.getPinOn();
-```
-
-
-**Example:**
-
-```cpp copy
-trafficLight.turnRed();
 ```
 
 
@@ -851,11 +845,11 @@ void getState()
 
 **Parameters:**
 
-- `void`: An instance of SmartTrafficLight
+- `void`: an instance of SmartTrafficLight
 
 **Returns:**
 
-- `State`
+- `enum State`: current state of the State Machine
 
 
 **Syntax:**
@@ -923,7 +917,7 @@ const char *getStringState()
 
 **Returns:**
 
-- `const char*`
+- `const char*`: current state of the State Machine in string format
 
 
 **Syntax:**
@@ -990,11 +984,47 @@ void onTurnGreen(void (*func)())
 **Syntax:**
 
 ```cpp copy
-trafficLight.onTurnGreen()
+trafficLight.onTurnGreen(my_func);
+trafficLight.onTurnGreen([]() {
+    doSomething;
+});
 ```
 
 
 **Example:**
+
+```cpp copy
+#include <SmartTrafficLight.h>
+
+#define GREEN_PIN 12
+#define YELLOW_PIN 11
+#define RED_PIN 10
+#define BUTTON_PIN 9
+
+SmartTrafficLight trafficLight{};
+
+void print_green_light() {
+    Serial.println("Green light!");
+}
+
+void setup() {
+    Serial.begin(9600);
+
+    trafficLight.attach(GREEN_PIN, YELLOW_PIN, RED_PIN, BUTTON_PIN);
+    trafficLight.begin();
+    trafficLight.enable();
+
+    trafficLight.onTurnGreen(print_green_light);
+
+    // trafficLight.onTurnGreen(()[] {
+    //     Serial.println("Green light!");
+    // })
+}
+
+void loop() {
+    trafficLight.update();
+}
+```
 
 
 ---
@@ -1023,11 +1053,47 @@ void onTurnYellow(void (*func)())
 **Syntax:**
 
 ```cpp copy
-trafficLight.onTurnYellow()
+trafficLight.onTurnYellow(my_func);
+trafficLight.onTurnYellow([]() {
+    doSomething;
+});
 ```
 
 
 **Example:**
+
+```cpp copy
+#include <SmartTrafficLight.h>
+
+#define GREEN_PIN 12
+#define YELLOW_PIN 11
+#define RED_PIN 10
+#define BUTTON_PIN 9
+
+SmartTrafficLight trafficLight{};
+
+void print_yellow_light() {
+    Serial.println("Yellow light!");
+}
+
+void setup() {
+    Serial.begin(9600);
+
+    trafficLight.attach(GREEN_PIN, YELLOW_PIN, RED_PIN, BUTTON_PIN);
+    trafficLight.begin();
+    trafficLight.enable();
+
+    trafficLight.onTurnYellow(print_yellow_light);
+
+    // trafficLight.onTurnYellow(()[] {
+    //     Serial.println("Yellow light!");
+    // })
+}
+
+void loop() {
+    trafficLight.update();
+}
+```
 
 
 ---
@@ -1056,11 +1122,47 @@ void onTurnRed(void (*func)())
 **Syntax:**
 
 ```cpp copy
-trafficLight.onTurnRed()
+trafficLight.onTurnRed(my_func);
+trafficLight.onTurnRed([]() {
+    doSomething;
+});
 ```
 
 
 **Example:**
+
+```cpp copy
+#include <SmartTrafficLight.h>
+
+#define GREEN_PIN 12
+#define YELLOW_PIN 11
+#define RED_PIN 10
+#define BUTTON_PIN 9
+
+SmartTrafficLight trafficLight{};
+
+void print_red_light() {
+    Serial.println("Red light!");
+}
+
+void setup() {
+    Serial.begin(9600);
+
+    trafficLight.attach(GREEN_PIN, YELLOW_PIN, RED_PIN, BUTTON_PIN);
+    trafficLight.begin();
+    trafficLight.enable();
+
+    trafficLight.onTurnRed(print_red_light);
+    
+    // trafficLight.onTurnRed(()[] {
+    //     Serial.println("Red light!");
+    // })
+}
+
+void loop() {
+    trafficLight.update();
+}
+```
 
 
 ---
@@ -1090,11 +1192,49 @@ void onEnable(void (*func)())
 **Syntax:**
 
 ```cpp copy
-trafficLight.onEnable()
+trafficLight.onEnable(my_func);
+trafficLight.onEnable([]() {
+    doSomething;
+});
 ```
 
 
 **Example:**
+
+```cpp copy
+#include <SmartTrafficLight.h>
+
+#define GREEN_PIN 12
+#define YELLOW_PIN 11
+#define RED_PIN 10
+#define BUTTON_PIN 9
+
+SmartTrafficLight trafficLight{};
+
+void print_enable() {
+    Serial.println("Enabling...");
+}
+
+void setup() {
+    Serial.begin(9600);
+
+    trafficLight.attach(GREEN_PIN, YELLOW_PIN, RED_PIN, BUTTON_PIN);
+    trafficLight.begin();
+
+    trafficLight.onEnable(print_enable);
+    
+    // trafficLight.onEnable(()[] {
+    //     Serial.println("Enabling...");
+    // })
+}
+
+void loop() {
+    trafficLight.update();
+    if (millis >= 5000) {
+        trafficLight.enable();
+    }
+}
+```
 
 
 ---
@@ -1124,11 +1264,50 @@ void onDisable(void (*func)())
 **Syntax:**
 
 ```cpp copy
-trafficLight.onDisable()
+trafficLight.onDisable(my_func);
+trafficLight.onDisable([]() {
+    doSomething;
+});
 ```
 
 
 **Example:**
+
+```cpp copy
+#include <SmartTrafficLight.h>
+
+#define GREEN_PIN 12
+#define YELLOW_PIN 11
+#define RED_PIN 10
+#define BUTTON_PIN 9
+
+SmartTrafficLight trafficLight{};
+
+void print_disable() {
+    Serial.println("Disabling...");
+}
+
+void setup() {
+    Serial.begin(9600);
+
+    trafficLight.attach(GREEN_PIN, YELLOW_PIN, RED_PIN, BUTTON_PIN);
+    trafficLight.begin();
+    trafficLight.enable();
+
+    trafficLight.onDisable(print_disable);
+    
+    // trafficLight.onDisable(()[] {
+    //     Serial.println("Disabling...");
+    // })
+}
+
+void loop() {
+    trafficLight.update();
+    if (millis >= 5000) {
+        trafficLight.disable();
+    }
+}
+```
 
 
 ---
@@ -1149,19 +1328,53 @@ void onStartBlinking(void (*func)())
 - `void (*func)()`: Pointer to a function (callback)
 
 
-**Returns:**
-
-- `void`
-
-
 **Syntax:**
 
 ```cpp copy
-trafficLight.onStartBlinking()
+trafficLight.onStartBlinking(my_func);
+trafficLight.onStartBlinking([]() {
+    doSomething;
+});
 ```
 
 
 **Example:**
+
+```cpp copy
+#include <SmartTrafficLight.h>
+
+#define GREEN_PIN 12
+#define YELLOW_PIN 11
+#define RED_PIN 10
+#define BUTTON_PIN 9
+
+SmartTrafficLight trafficLight{};
+
+void print_start_blinking() {
+    Serial.println("Starting blinking...");
+}
+
+void setup() {
+    Serial.begin(9600);
+
+    trafficLight.attach(GREEN_PIN, YELLOW_PIN, RED_PIN, BUTTON_PIN);
+    trafficLight.begin();
+    trafficLight.enable();
+
+    trafficLight.onStartBlinking(print_start_blinking);
+    
+    // trafficLight.onStartBlinking(()[] {
+    //     Serial.println("Starting blinking...");
+    // })
+}
+
+void loop() {
+    trafficLight.update();
+    if (millis >= 5000) {
+        trafficLight.startBlinking();
+    }
+}
+```
 
 
 ---
@@ -1190,11 +1403,50 @@ void onStopBlinking(void (*func)())
 **Syntax:**
 
 ```cpp copy
-trafficLight.onStopBlinking()
+trafficLight.onStopBlinking(my_func);
+trafficLight.onStopBlinking([]() {
+    doSomething;
+});
 ```
 
 
 **Example:**
+
+```cpp copy
+#include <SmartTrafficLight.h>
+
+#define GREEN_PIN 12
+#define YELLOW_PIN 11
+#define RED_PIN 10
+#define BUTTON_PIN 9
+
+SmartTrafficLight trafficLight{};
+
+void print_stop_blinking() {
+    Serial.println("Stopping blinking...");
+}
+
+void setup() {
+    Serial.begin(9600);
+
+    trafficLight.attach(GREEN_PIN, YELLOW_PIN, RED_PIN, BUTTON_PIN);
+    trafficLight.begin();
+    trafficLight.startBlinking();
+
+    trafficLight.onStopBlinking(print_stop_blinking);
+    
+    // trafficLight.onStopBlinking(()[] {
+    //     Serial.println("Stopping blinking...");
+    // })
+}
+
+void loop() {
+    trafficLight.update();
+    if (millis >= 5000) {
+        trafficLight.StopBlinking();
+    }
+}
+```
 
 
 ---
@@ -1223,11 +1475,56 @@ void onAlterState(void (*func)())
 **Syntax:**
 
 ```cpp copy
-trafficLight.onAlterState()
+trafficLight.onAlterState(my_func);
+trafficLight.onAlterState([]() {
+    doSomething;
+});
 ```
 
 
 **Example:**
 
+```cpp copy
+#include <SmartTrafficLight.h>
+
+#define GREEN_PIN 12
+#define YELLOW_PIN 11
+#define RED_PIN 10
+#define BUTTON_PIN 9
+
+SmartTrafficLight trafficLight{};
+
+void print_alter_state() {
+    Serial.println("State has been altered!");
+}
+
+void setup() {
+    Serial.begin(9600);
+
+    trafficLight.attach(GREEN_PIN, YELLOW_PIN, RED_PIN, BUTTON_PIN);
+    trafficLight.begin();
+    trafficLight.enable();
+
+    trafficLight.onAlterState(print_alter_state);
+    
+    // trafficLight.onAlterState(()[] {
+    //     Serial.println("State has been altered!");
+    // })
+}
+
+void loop() {
+    trafficLight.update();
+    if (millis >= 15000) {
+        trafficLight.disable();
+    }
+    else if (millis >= 10000) {
+        trafficLight.startBlinking();
+    }
+}
+```
+
 
 ---
+
+
+> "'I Dig a Pygmy', by Charles Hawtrey and the Deaf Aids... Phase One, in which Doris gets her oats!"
