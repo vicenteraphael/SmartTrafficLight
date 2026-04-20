@@ -26,14 +26,20 @@ SmartTrafficLight::SmartTrafficLight(const uint8_t g_pin, const uint8_t y_pin, c
 
 // ================================ INITIALIZATION ================================
 
+void SmartTrafficLight::printUninitializedError() {
+    Serial.begin(9600);
+    Serial.println("Fatal: uninitialized...");
+    Serial.println("Use attach() to configure the pins");
+    Serial.println("Use setIntervals() to customize the traffic light intervals");
+    Serial.println("Use begin() to start the traffic light");
+}
+
 void SmartTrafficLight::assertBegun() {
     if (!begun) {
-        Serial.begin(9600);
-        Serial.println("Fatal: uninitialized...");
-        Serial.println("Use attach() to configure the pins");
-        Serial.println("Use setIntervals() to customize the traffic light intervals");
-        Serial.println("Use begin() to start the traffic light");
-        while(true);
+        printUninitializedError();
+        state = ERROR_STATE;
+        begun = true;
+        pinMode(LED_BUILTIN, OUTPUT);
     }
 }
 
@@ -102,10 +108,25 @@ void SmartTrafficLight::handleBlinking() {
     }
 }
 
+void SmartTrafficLight::handleError() {
+    if (digitalRead(LED_BUILTIN) == HIGH) {
+        if (millis() - lastTimeTransition >= BLINKING_INTERVAL) {
+            lastTimeTransition = millis();
+            digitalWrite(LED_BUILTIN, LOW);
+        }
+    } else {
+        if (millis() - lastTimeTransition >= BLINKING_INTERVAL) {
+            lastTimeTransition = millis();
+            digitalWrite(LED_BUILTIN, HIGH);
+        }
+    }
+}
 
 // ================================ STATE MACHINE ================================
 
 void SmartTrafficLight::goTo(State newState) {
+    assertBegun();
+    if (state == ERROR_STATE) return;
     switch (newState) {
         case GREEN_STATE:
             if (state == DISABLED_STATE && onEn) onEn();
@@ -134,8 +155,6 @@ void SmartTrafficLight::goTo(State newState) {
 }
 
 void SmartTrafficLight::update() {
-    assertBegun();
-
     switch (state) {
         case GREEN_STATE:
             handleGreen();
@@ -155,6 +174,9 @@ void SmartTrafficLight::update() {
 
         case DISABLED_STATE:
             break;
+
+        case ERROR_STATE:
+            handleError();
     }
 }
 

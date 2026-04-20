@@ -18,7 +18,8 @@ enum State {
     YELLOW_STATE,
     RED_STATE,
     BLINKING_YELLOW_STATE,
-    DISABLED_STATE
+    DISABLED_STATE,
+    ERROR_STATE
 };
 
 const char stringStates[][22] = {
@@ -27,6 +28,7 @@ const char stringStates[][22] = {
     "RED_STATE",
     "BLINKING_YELLOW_STATE",
     "DISABLED_STATE",
+    "ERROR_STATE"
 };
 
 class SmartTrafficLight {
@@ -49,6 +51,7 @@ class SmartTrafficLight {
         uint8_t pinOn = NO_PIN;
         
         void assertBegun();
+        void printUninitializedError();
 
         void turnOn(const uint8_t led_pin);
         void turnOff();
@@ -58,6 +61,7 @@ class SmartTrafficLight {
         void handleYellow();
         void handleRed();
         void handleBlinking();
+        void handleError();
 
         void (*onGreen)() = nullptr;
         void (*onYellow)() = nullptr;
