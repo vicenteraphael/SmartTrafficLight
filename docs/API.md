@@ -141,7 +141,6 @@ void attach(const uint8_t g_pin, const uint8_t y_pin, const uint8_t r_pin, const
 - `y_pin`: Digital pin for the yellow LED
 - `r_pin`: Digital pin for the red LED
 - `b_pin`: Digital pin for the button LED (OPTIONAL)
-- `trafficLight`: An instance of SmartTrafficLight
 
 
 **Returns:**
@@ -845,7 +844,7 @@ void getState()
 
 **Parameters:**
 
-- `void`: an instance of SmartTrafficLight
+- `void`
 
 **Returns:**
 
