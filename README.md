@@ -104,7 +104,7 @@ This library implements a Finite State Machine (FSM) to ensure non-blocking oper
 - `DISABLED_STATE`
 
 
-### Alter state functions
+### State control functions
 
 You can, at any moment, change the state of the system without interrupting its behaviour
 

@@ -10,7 +10,7 @@
 3. [Initialization and update](#initialization-and-update)
     - [`begin()`](#begin)
     - [`update()`](#update)
-4. [Alter State](#alter-state)
+4. [State Control](#state-control)
     - [`enable()`](#enable)
     - [`disable()`](#disable)
     - [`startBlinking()`](#startblinking)
@@ -90,11 +90,11 @@ void loop() {
 Typical usage flow:
 
 1. Instantiate the object
-2. (Optional) Configure pins with attach()
-3. (Optional) Configure intervals with setIntervals()
-4. Call begin()
-5. (Optional) Enable the system with enable()
-6. Call update() continuously inside loop()
+2. **(Optional)** Configure pins with `attach()`
+3. **(Optional)** Configure intervals with `setIntervals()`
+4. Call `begin()`
+5. Enable the system with `enable()` **(Required to start operation)**
+6. Call `update()` continuously inside `loop()`
 
 Common mistakes:
 
@@ -124,17 +124,17 @@ Creates an instance of `SmartTrafficLight` and, optionally, configures the pins 
 
 ```cpp copy
 SmartTrafficLight() = default
-SmartTrafficLight(const uint8_t g_pin, const uint8_t y_pin, const uint8_t r_pin, const uint8_t b_pin = NO_PIN)
+SmartTrafficLight(const uint8_t gPin, const uint8_t yPin, const uint8_t rPin, const uint8_t bPin = NO_PIN)
 ```
-> Note: `NO_PIN` is an internal macro with value `255`, which literally means "no pin"
+> **Note:** `NO_PIN` is an internal macro with value `255`, which literally means "no pin"
 
 **Parameters:**
 
 - `void` or:
-- `g_pin`: Digital pin for the green LED
-- `y_pin`: Digital pin for the yellow LED
-- `r_pin`: Digital pin for the red LED
-- `b_pin`: Digital pin for the button LED (OPTIONAL)
+- `gPin`: Digital pin for the green LED
+- `yPin`: Digital pin for the yellow LED
+- `rPin`: Digital pin for the red LED
+- `bPin`: Digital pin for the pedestrian button pin **(OPTIONAL)**
 
 
 **Returns:**
@@ -151,7 +151,7 @@ SmartTrafficLight(12, 8, 7, 2);
 
 In the first case, the constructor will only create an instance of SmartTrafficLight and return it. Therefore, the pins configuration will need to be done by using [`attach()`](#attach).
 
-In the second case, the pins are being configured, except for the button, that is passed on in the third case.
+In the second case, the LED pins are being configured, except for the button pin, that is passed on in the third case.
 
 
 **Example:**
@@ -195,7 +195,7 @@ void loop() {}
 
 **Description:**
 
-⚠️ This method must be called if, and only if, the pins weren't configured in the constructor, aka [`SmartTrafficLight()`](#smarttrafficlight)
+⚠️ **CONDITIONALLY REQUIRED** - This method must be called and only if the pins were not set in the constructor, aka [`SmartTrafficLight()`](#smarttrafficlight)
 
 Configures the pins to be used. Can be called to configure the pins instead of [`SmartTrafficLight()`](#smarttrafficlight)
 
@@ -203,17 +203,17 @@ Configures the pins to be used. Can be called to configure the pins instead of [
 **Definition:**
 
 ```cpp copy
-void attach(const uint8_t g_pin, const uint8_t y_pin, const uint8_t r_pin, const uint8_t b_pin = NO_PIN)
+void attach(const uint8_t gPin, const uint8_t yPin, const uint8_t rPin, const uint8_t bPin = NO_PIN)
 ```
 
-> Note: `NO_PIN` is an internal macro with value `255`, which literally means "no pin"
+> **Note:** `NO_PIN` is an internal macro with value `255`, which literally means "no pin"
 
 **Parameters:**
 
-- `g_pin`: Digital pin for the green LED
-- `y_pin`: Digital pin for the yellow LED
-- `r_pin`: Digital pin for the red LED
-- `b_pin`: Digital pin for the button LED (OPTIONAL)
+- `gPin`: Digital pin for the green LED
+- `yPin`: Digital pin for the yellow LED
+- `rPin`: Digital pin for the red LED
+- `bPin`: Digital pin for the pedestrian button pin **(OPTIONAL)**
 
 
 **Returns:**
@@ -258,25 +258,36 @@ void loop() {}
 
 Configures each individual LED display timing, along with the minimum green time for the button timeout. If not called, the values are defined by default:
 
-- Green interval        =   10000 ms
-- Yellow interval       =   2000 ms
-- Red interval          =   50000 ms
-- Min green time        =   5000 ms
+- Green interval        =   10000 milliseconds
+- Yellow interval       =   2000 milliseconds
+- Red interval          =   5000 milliseconds
+- Minimum green time        =   5000 milliseconds
 
 
 **Definition:**
 
 ```cpp copy
-void setIntervals(const unsigned long g_interval, const unsigned long y_interval, const unsigned long r_interval, const unsigned long min_g_time = DEFAULT_MIN_GREEN_TIME)
+void setIntervals(const unsigned long gInterval, const unsigned long yInterval, const unsigned long rInterval, const unsigned long minGTime = DEFAULT_MIN_GREEN_TIME)
 ```
 
 
 **Parameters:**
 
-- `g_interval`: Amount of time, in milliseconds (ms), in which the green pin shall be HIGH
-- `y_interval`: Amount of time, in milliseconds (ms), in which the yellow pin shall be HIGH
-- `r_interval`: Amount of time, in milliseconds (ms), in which the red pin shall be HIGH
-- `min_green_time`: Minimum amount of time, in milliseconds (ms), in which the green pin shall be HIGH before triggering the button (OPTIONAL: default value = 5000 ms)
+- `gInterval`: Amount of time, in milliseconds, in which the green pin shall be `HIGH`
+- `yInterval`: Amount of time, in milliseconds, in which the yellow pin shall be `HIGH`
+- `rInterval`: Amount of time, in milliseconds, in which the red pin shall be `HIGH`
+- `minGTime`: **(OPTIONAL)** Minimum amount of time, in milliseconds, in which the green pin shall be `HIGH` before triggering the button. **DEFAULT VALUE:** 5000 milliseconds.
+
+> **Note:** `DEFAULT_MIN_GREEN_TIME` is an internal macro for the default minimum green time (5000 milliseconds). The other literals are:
+
+```cpp copy
+#define DEFAULT_GREEN_INTERVAL (10000)
+#define DEFAULT_YELLOW_INTERVAL (2000)
+#define DEFAULT_RED_INTERVAL (5000)
+#define DEFAULT_MIN_GREEN_TIME (5000)
+
+#define BLINKING_INTERVAL (1000) // For ERROR_STATE and BLINKING_YELLOW_STATE
+```
 
 
 **Returns:**
@@ -324,9 +335,9 @@ void loop() {}
 
 **Description:**
 
-⚠️ This method must be called before using the traffic light
+⚠️ **REQUIRED** - This method must be called before using the traffic light
 
-Initializes the system and checks if the pins were configured successfully. If not, the following message is displayed on the serial monitor and the program is frozen (by a `while(true)` statement):
+Initializes the system and checks if the pins were configured successfully. If not, the following message is displayed on the serial monitor and the program enters `ERROR_STATE`, which is a non-blocking state that triggers a constant blinking on the `LED_BUILTIN` pin (usually digital pin n° 13).
 
 ```
 Fatal: uninitialized...
@@ -335,7 +346,7 @@ Use setIntervals() to customize the traffic light intervals
 Use begin() to start the traffic light
 ```
 
-If, by chance, `begin()` is not called before for initialization, the same message and behaviour will occur when a public method is called.
+> **Note:** the library is fail-safe: calling any public method before begin() will automatically trigger ERROR_STATE
 
 
 **Definition:**
@@ -391,7 +402,7 @@ void loop() {}
 
 **Description:**
 
-⚠️ This method must be called as often as possible in order for the traffic light logic to work
+⚠️ **REQUIRED** - This method must be called as often as possible in order for the traffic light logic to work. The library is non-blocking and relies on `millis()`, so `update()` drives the internal state machine.
 
 Updates the current state of the traffic light FSM using millis(). Needs to be continuously called inside `loop()`
 
@@ -445,7 +456,7 @@ void loop() {
 ---
 
 
-## Alter state
+## State control
 
 The methods in this section allow changing the current state of the traffic light FSM without interrupting its behaviour. The states are in the following format:
 
@@ -455,7 +466,8 @@ enum State {
     YELLOW_STATE, // Yellow light is active (transition before red)
     RED_STATE, // Red light is active
     BLINKING_YELLOW_STATE, // Blinking mode (night mode)
-    DISABLED_STATE // System is inactive (out of service)
+    DISABLED_STATE, // System is inactive (out of service)
+    ERROR_STATE // For handling initialization error
 };
 ```
 
@@ -467,8 +479,8 @@ In practice, the states can be represented by the following schema:
 > Dashed line  = method call (user-triggered)
 
 
-> `ANY STATE` → `BLINKING` (`startBlinking()`) <br>
-> `ANY STATE` → `DISABLED` (`disable()`)
+> `ANY STATE` → `BLINKING_YELLOW_STATE` = `startBlinking()` <br>
+> `ANY STATE` → `DISABLED_STATE` = `disable()`
 
 By default, the system starts on `DISABLED_STATE`
 
@@ -480,6 +492,8 @@ By default, the system starts on `DISABLED_STATE`
 
 
 **Description:**
+
+⚠️ **REQUIRED** - This method must be called to start operation
 
 Changes the current state from `DISABLED_STATE` to `GREEN_STATE`, enabling the traffic light for use. If the current state is different from `DISABLED_STATE`, the call is ignored.
 
@@ -537,7 +551,7 @@ void loop() {
 
 Changes the current state, whatever it may be, to `DISABLED_STATE`, taking the entire traffic light out of service.
 
-> Note: this is the default state in which the system starts
+> **Note:** this is the default state in which the system starts
 
 
 **Definition:**
@@ -569,7 +583,7 @@ trafficLight.disable();
 ```cpp copy
 #include <SmartTrafficLight.h>
 
-SmartTrafficLight trafficLight(12, 11, 10, 9);;
+SmartTrafficLight trafficLight(12, 11, 10, 9);
 
 void setup() {
     trafficLight.begin();
@@ -823,7 +837,7 @@ The system has built-in getter functions that allow accessing state-related attr
 
 **Description:**
 
-Returns the current HIGH LED pin. If no pin is HIGH, returns 255
+Returns the current `HIGH` LED pin. If no pin is currently `HIGH`, returns `NO_PIN` (255)
 
 
 **Definition:**
@@ -840,7 +854,7 @@ const uint8_t getPinOn()
 
 **Returns:**
 
-- `const uint8_t`: current HIGH LED pin. If no pin is HIGH, returns 255
+- `const uint8_t`: current `HIGH` LED pin. If no pin is `HIGH`, returns 255
 
 
 **Syntax:**
@@ -948,7 +962,7 @@ void loop() {
 
 **Description:**
 
-Returns the current state of the FSM as a string (const char*)
+Returns the current state of the FSM as a string (`const char*`)
 
 
 **Definition:**
@@ -1001,7 +1015,10 @@ void loop() {
 
 ## Event functions and callbacks
 
-The system has various built-in event functions that allow attaching custom callbacks gets triggered after some specific changes of state happens. These functions should be called once and only accept pointers to functions or lambda functions (which requires C++11 support). If an event function is not set up, no callbacks are dispatched by when the specific event changes.
+The system has various built-in event functions that allow attaching custom callbacks are triggered after some specific changes of state happens. These functions should be called once and only accept pointers to functions or lambda functions (which requires C++11 support). If an event function is not set up, no callbacks are dispatched when the event occurs.
+
+
+---
 
 
 ### `onTurnGreen()`
@@ -1033,7 +1050,7 @@ void onTurnGreen(void (*func)())
 ```cpp copy
 trafficLight.onTurnGreen(my_func);
 trafficLight.onTurnGreen([]() {
-    doSomething; // Requires C++11 support
+    doSomething(); // Requires C++11 support
 });
 ```
 
@@ -1100,7 +1117,7 @@ void onTurnYellow(void (*func)())
 ```cpp copy
 trafficLight.onTurnYellow(my_func);
 trafficLight.onTurnYellow([]() {
-    doSomething; // Requires C++11 support
+    doSomething(); // Requires C++11 support
 });
 ```
 
@@ -1169,7 +1186,7 @@ void onTurnRed(void (*func)())
 ```cpp copy
 trafficLight.onTurnRed(my_func);
 trafficLight.onTurnRed([]() {
-    doSomething; // Requires C++11 support
+    doSomething(); // Requires C++11 support
 });
 ```
 
@@ -1238,7 +1255,7 @@ void onEnable(void (*func)())
 ```cpp copy
 trafficLight.onEnable(my_func);
 trafficLight.onEnable([]() {
-    doSomething; // Requires C++11 support
+    doSomething(); // Requires C++11 support
 });
 ```
 
@@ -1310,7 +1327,7 @@ void onDisable(void (*func)())
 ```cpp copy
 trafficLight.onDisable(my_func);
 trafficLight.onDisable([]() {
-    doSomething; // Requires C++11 support
+    doSomething(); // Requires C++11 support
 });
 ```
 
@@ -1375,7 +1392,7 @@ void onStartBlinking(void (*func)())
 ```cpp copy
 trafficLight.onStartBlinking(my_func);
 trafficLight.onStartBlinking([]() {
-    doSomething; // Requires C++11 support
+    doSomething(); // Requires C++11 support
 });
 ```
 
@@ -1447,7 +1464,7 @@ void onStopBlinking(void (*func)())
 ```cpp copy
 trafficLight.onStopBlinking(my_func);
 trafficLight.onStopBlinking([]() {
-    doSomething; // Requires C++11 support
+    doSomething(); // Requires C++11 support
 });
 ```
 
@@ -1517,7 +1534,7 @@ void onAlterState(void (*func)())
 ```cpp copy
 trafficLight.onAlterState(my_func);
 trafficLight.onAlterState([]() {
-    doSomething; // Requires C++11 support
+    doSomething(); // Requires C++11 support
 });
 ```
 
@@ -1590,6 +1607,8 @@ void print_green_yellow_red() {
             Serial.println("Turning Red...");
             break;
     }
+    Serial.print("Pin on: ");
+    Serial.println(trafficLight.getPinOn());
 }
 
 void print_enable() {
@@ -1638,6 +1657,12 @@ void loop(){
 }
 ```
 
+See also:
+
+[01 - Hello World](/examples/01-HelloWorld/README.md)
+[02 - Testing Staes](/examples/02-TestingStates/README.md)
+[03 - Testing Callbacks](/examples/03-TestingCallbacks/README.md)
+[04 - All Together](/examples/04-AllTogether/README.md)
 
 ---
 

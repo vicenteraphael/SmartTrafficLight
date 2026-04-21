@@ -3,24 +3,24 @@
 
 // ================================ CONSTRUCTORS ================================
 
-void SmartTrafficLight::attach(const uint8_t g_pin, const uint8_t y_pin, const uint8_t r_pin, const uint8_t b_pin) {
-    greenPin = g_pin;
-    yellowPin = y_pin;
-    redPin = r_pin;
-    buttonPin = b_pin;
+void SmartTrafficLight::attach(const uint8_t gPin, const uint8_t yPin, const uint8_t rPin, const uint8_t bPin) {
+    greenPin = gPin;
+    yellowPin = yPin;
+    redPin = rPin;
+    buttonPin = bPin;
 }
 
-void SmartTrafficLight::setIntervals(const unsigned long g_interval, const unsigned long y_interval, const unsigned long r_interval, const unsigned long min_g_time) {
-    greenInterval = g_interval;
-    yellowInterval = y_interval;
-    redInterval = r_interval;
-    minGreenTime = min_g_time;
+void SmartTrafficLight::setIntervals(const unsigned long gInterval, const unsigned long yInterval, const unsigned long rInterval, const unsigned long minGTime) {
+    greenInterval = gInterval;
+    yellowInterval = yInterval;
+    redInterval = rInterval;
+    minGreenTime = minGTime;
 }
 
 SmartTrafficLight::SmartTrafficLight() = default;
 
-SmartTrafficLight::SmartTrafficLight(const uint8_t g_pin, const uint8_t y_pin, const uint8_t r_pin, const uint8_t b_pin) {
-    attach(g_pin, y_pin, r_pin, b_pin);
+SmartTrafficLight::SmartTrafficLight(const uint8_t gPin, const uint8_t yPin, const uint8_t rPin, const uint8_t bPin) {
+    attach(gPin, yPin, rPin, bPin);
 }
 
 
@@ -62,14 +62,14 @@ void SmartTrafficLight::begin() {
 // ================================ TRAFFIC LIGHT HANDLING ================================
 
 
-void SmartTrafficLight::turnOn(const uint8_t led_pin){
+void SmartTrafficLight::turnOn(const uint8_t ledPin){
     lastTimeTransition = millis();
 
     if (pinOn != NO_PIN) digitalWrite(pinOn, LOW);
 
-    digitalWrite(led_pin, HIGH);
+    digitalWrite(ledPin, HIGH);
 
-    pinOn = led_pin;
+    pinOn = ledPin;
 }
 
 void SmartTrafficLight::turnOff() {
@@ -183,7 +183,7 @@ void SmartTrafficLight::update() {
 
 // ================================ PUBLIC METHODS ================================
 
-// Alter state functions
+// State control functions
 
 void SmartTrafficLight::enable() {
     assertBegun();

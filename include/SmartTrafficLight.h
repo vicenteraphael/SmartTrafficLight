@@ -4,7 +4,6 @@
 #include <Arduino.h>
 
 #define NO_PIN (255)
-#define NO_INTERVAL (0)
 
 #define DEFAULT_GREEN_INTERVAL (10000)
 #define DEFAULT_YELLOW_INTERVAL (2000)
@@ -53,7 +52,7 @@ class SmartTrafficLight {
         void assertBegun();
         void printUninitializedError();
 
-        void turnOn(const uint8_t led_pin);
+        void turnOn(const uint8_t ledPin);
         void turnOff();
 
         void handleButton();
@@ -78,24 +77,24 @@ class SmartTrafficLight {
         SmartTrafficLight();
 
         SmartTrafficLight(
-            uint8_t g_pin,
-            uint8_t y_pin,
-            uint8_t r_pin,
-            uint8_t b_pin = NO_PIN
+            uint8_t gPin,
+            uint8_t yPin,
+            uint8_t rPin,
+            uint8_t bPin = NO_PIN
         );
 
         void attach(
-            uint8_t g_pin,
-            uint8_t y_pin,
-            uint8_t r_pin,
-            uint8_t b_pin = NO_PIN
+            uint8_t gPin,
+            uint8_t yPin,
+            uint8_t rPin,
+            uint8_t bPin = NO_PIN
         );
 
         void setIntervals(
-            unsigned long g_Interval,
-            unsigned long y_Interval,
-            unsigned long r_Interval,
-            unsigned long min_g_time = DEFAULT_MIN_GREEN_TIME
+            unsigned long gInterval,
+            unsigned long yInterval,
+            unsigned long rInterval,
+            unsigned long minGTime = DEFAULT_MIN_GREEN_TIME
         );
 
         void begin();

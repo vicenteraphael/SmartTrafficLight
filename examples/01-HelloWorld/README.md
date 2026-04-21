@@ -14,7 +14,7 @@ A basic demonstration of how to use the library to create a simple cicle on a tr
 
 ![Smart Traffic Light | Hello World | Circuit](https://csg.us-east-1.prd.tinkercad.com/things/bzrGuEH0dDF/t725.png?rev=1776528854675000000&s=&v=1&type=circuits)
 
-> Made on [Tinkercad](https://www.tinkercad.com/things/bzrGuEH0dDF-smart-traffic-light)
+> Made on [Tinkercad](https://www.tinkercad.com/things/bzrGuEH0dDF-smart-traffic-light-hello-world)
 
 ## Schematic
 

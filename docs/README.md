@@ -39,7 +39,7 @@ control of different states and the implementation of event-driven behaviour suc
 
 4. Make sure to have a common GND wiring.
 
-> Please note that a resistor for the button is not needed once this library uses pin mode `INPUT_PULLUP`, which already uses the Arduino internal resistor for this matter.
+> **Please note** that a resistor for the button is not needed once this library uses pin mode `INPUT_PULLUP`, which already uses the Arduino internal resistor for this matter.
 
 ## Schematic
 

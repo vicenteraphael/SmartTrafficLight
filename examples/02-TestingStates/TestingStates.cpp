@@ -23,7 +23,7 @@ void print_state() {
     Serial.println(trafficLight.getPinOn());
     
     Serial.print("Current state: ");
-    Serial.println(trafficLight.getCurrentState());
+    Serial.println(trafficLight.getStringState());
 }
 
 void setup() {
@@ -40,6 +40,10 @@ void setup() {
 
 void loop(){
     trafficLight.update();
-  	if (millis() >= 10000) trafficLight.enable();
-  	else if (millis() >= 5000) trafficLight.disable();
+  	if (millis() >= 10000) {
+      trafficLight.enable();
+    }
+  	else if (millis() >= 5000) {
+      trafficLight.disable();
+    } 
 }
