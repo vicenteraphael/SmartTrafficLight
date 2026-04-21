@@ -475,12 +475,12 @@ In practice, the states can be represented by the following schema:
 
 ![SmartTrafficLight | Finite State Machine](/docs/img/fsm.png)
 
-> Solid line   = automatic transition (TIMEOUT) <br>
-> Dashed line  = method call (user-triggered)
+> `Solid line`   = automatic transition (`timeout`) <br>
+> `Dashed line`  = method call (`user-triggered`)
 
 
-> `ANY STATE` → `BLINKING_YELLOW_STATE` = `startBlinking()` <br>
-> `ANY STATE` → `DISABLED_STATE` = `disable()`
+> `ANY STATE` → `BLINKING_YELLOW_STATE` = [`startBlinking()`](#startblinking) <br>
+> `ANY STATE` → `DISABLED_STATE` = [`disable()`](#disable)
 
 By default, the system starts on `DISABLED_STATE`
 
@@ -1659,10 +1659,10 @@ void loop(){
 
 See also:
 
-[01 - Hello World](/examples/01-HelloWorld/README.md)
-[02 - Testing Staes](/examples/02-TestingStates/README.md)
-[03 - Testing Callbacks](/examples/03-TestingCallbacks/README.md)
-[04 - All Together](/examples/04-AllTogether/README.md)
+01. [Hello World](/examples/01-HelloWorld/README.md)
+02. [Testing States](/examples/02-TestingStates/README.md)
+03. [Testing Callbacks](/examples/03-TestingCallbacks/README.md)
+04. [All Together](/examples/04-AllTogether/README.md)
 
 ---
 

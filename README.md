@@ -81,7 +81,7 @@ void loop() {
 4. Start the traffic light with `enable()`
 5. Call `update()` continuously inside `loop()` <br><br>
 
-Note: You can also pass the pins directly through the constructor instead of calling `attach()`
+> **Note:** You can also pass the pins directly through the constructor instead of calling `attach()`
 
 Like this:
 
@@ -97,11 +97,25 @@ SmartTrafficLight trafficLight(GREEN_PIN, YELLOW_PIN, RED_PIN, BUTTON_PIN);
 
 This library implements a Finite State Machine (FSM) to ensure non-blocking operation. The states are the following:
 
-- `GREEN_STATE`
-- `YELLOW_STATE`
-- `RED_STATE`
-- `BLINKING_YELLOW_STATE`
-- `DISABLED_STATE`
+- `GREEN_STATE` → green light is active
+- `YELLOW_STATE` → yellow light is active (transition before red)
+- `RED_STATE` → red light is active
+- `BLINKING_YELLOW_STATE` → blinking mode (night mode)
+- `DISABLED_STATE` → system is inactive (out of service)
+- `ERROR_STATE` → for handling initialization error
+
+In practice, the states can be represented by the following schema:
+
+![SmartTrafficLight | Finite State Machine](/docs/img/fsm.png)
+
+> `Solid line`   = automatic transition (`timeout`) <br>
+> `Dashed line`  = method call (`user-triggered`)
+
+
+> `ANY STATE` → `BLINKING_YELLOW_STATE` = `startBlinking()` <br>
+> `ANY STATE` → `DISABLED_STATE` = `disable()`
+
+> **Note:** by default, the system starts on `DISABLED_STATE`
 
 
 ### State control functions
@@ -114,6 +128,8 @@ You can, at any moment, change the state of the system without interrupting its 
 - `disable()` → turns the system off and goes to `DISABLED_STATE`
 - `turnGreen()` → starts transition from `RED_STATE` to `GREEN_STATE`
 - `turnRed()` → starts transition from `GREEN_STATE` to `RED_STATE` (passing by `YELLOW_STATE`) or from `YELLOW_STATE` to `RED_STATE`
+
+> **Note:** if the change of state is invalid, the call is ignored
 
 
 ### Event Functions
@@ -129,14 +145,15 @@ You can attach custom callbacks that will be triggered when the state changes:
 - `onStopBlinking()` → called when the system stops blinking
 - `onAlterState()` → called whenever the state is changed
 
+> **Note:** if the event functions isn't set up, the call is ignored when the state occurs
 
 ### Getter functions
 
 You can use these functions to access state-related attributes:
 
-- `getState()` → returns current state in enum State format
-- `getStringState()` → returns current state in string format
-- `getPinOn()` → returns current HIGH LED pin number (255 meaning no pin is HIGH)
+- `getState()` → returns current state in `enum State` format
+- `getStringState()` → returns current state in `string` format (`const char*`)
+- `getPinOn()` → returns current `HIGH` LED pin number, returns `NO_PIN` (which is 255) if no pin is `HIGH`
 
 
 ---
