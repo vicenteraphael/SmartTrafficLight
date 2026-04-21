@@ -50,3 +50,4 @@ control of different states and the implementation of event-driven behaviour suc
 1. [Hello World](/examples/01-HelloWorld/README.md): an introduction to the livrary
 2. [Testing States](/examples/02-TestingStates/README.md): an example of how to control the library states
 3. [Testing Callbacks](/examples/03-TestingCallbacks/README.md): an example of how to use the library event functions
+4. [All Together](/examples/04-AllTogether/README.md): an example demonstrating all functionalities together

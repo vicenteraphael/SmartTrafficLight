@@ -12,12 +12,13 @@ An easy-to-use, non-blocking Arduino library for building smart traffic light sy
 
 ## Features
 
-- Traffic light cycle handling
+- Non-blocking traffic light cycle handling
 - Support for pedestrian button
+- Customized LED intervals
 - Blinking (nocturnal) mode
 - Enabled/Disabled mode
 - Event-driven architecture
-
+- Error handling by blinking `LED_BUILTIN` pin
 
 ---
 
@@ -30,7 +31,11 @@ An easy-to-use, non-blocking Arduino library for building smart traffic light sy
     ```
 2. Move it to your `Arduino/libraries/` folder
 3. Restart the Arduino IDE
+4. Include it in your code:
 
+    ```cpp copy
+    #include <SmartTrafficLight.h>
+    ```
 
 ---
 
@@ -95,7 +100,7 @@ SmartTrafficLight trafficLight(GREEN_PIN, YELLOW_PIN, RED_PIN, BUTTON_PIN);
 
 ## Architecture
 
-This library implements a Finite State Machine (FSM) to ensure non-blocking operation. The states are the following:
+This library implements a Finite State Machine (FSM) to ensure non-blocking operation, using `millis()` to update it (without `delay()`). The states are the following:
 
 - `GREEN_STATE` → green light is active
 - `YELLOW_STATE` → yellow light is active (transition before red)
@@ -147,13 +152,23 @@ You can attach custom callbacks that will be triggered when the state changes:
 
 > **Note:** if the event functions isn't set up, the call is ignored when the state occurs
 
-### Getter functions
+### Getter methods
 
 You can use these functions to access state-related attributes:
 
 - `getState()` → returns current state in `enum State` format
 - `getStringState()` → returns current state in `string` format (`const char*`)
 - `getPinOn()` → returns current `HIGH` LED pin number, returns `NO_PIN` (which is 255) if no pin is `HIGH`
+
+
+---
+
+# Examples
+
+1. [Hello World](/examples/01-HelloWorld/README.md): an introduction to the livrary
+2. [Testing States](/examples/02-TestingStates/README.md): an example of how to control the library states
+3. [Testing Callbacks](/examples/03-TestingCallbacks/README.md): an example of how to use the library event functions
+4. [All Together](/examples/04-AllTogether/README.md): an example demonstrating all functionalities together
 
 
 ---
