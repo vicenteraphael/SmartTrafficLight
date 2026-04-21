@@ -8,18 +8,18 @@ on:
     - cron: "0 12 * * SAT"
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   lint:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Arduino Lint
-        uses: arduino/arduino-lint-action@v2
+      - uses: arduino/arduino-lint-action@v2
         with:
-          compliance: specification
+          compliance: strict
           library-manager: submit
           project-type: library
-          strict: true
