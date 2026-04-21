@@ -163,7 +163,7 @@ You can use these functions to access state-related attributes:
 
 ---
 
-# Examples
+## Examples
 
 1. [Hello World](/examples/01-HelloWorld/README.md): an introduction to the livrary
 2. [Testing States](/examples/02-TestingStates/README.md): an example of how to control the library states
