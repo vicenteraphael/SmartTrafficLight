@@ -2,23 +2,35 @@
 # Syntax Coloring Map SmartTrafficLight
 #######################################
 
+
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
+
 SmartTrafficLight	KEYWORD1
+State	KEYWORD1
+
+
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
+
+# Core
 attach	KEYWORD2
+setIntervals	KEYWORD2
 begin	KEYWORD2
 update	KEYWORD2
-startBlinking	KEYWORD2
-stopBlinking	KEYWORD2
+
+# Control
 enable	KEYWORD2
 disable	KEYWORD2
+startBlinking	KEYWORD2
+stopBlinking	KEYWORD2
 turnGreen	KEYWORD2
 turnRed	KEYWORD2
+
+# Events
 onTurnGreen	KEYWORD2
 onTurnYellow	KEYWORD2
 onTurnRed	KEYWORD2
@@ -27,16 +39,29 @@ onDisable	KEYWORD2
 onStartBlinking	KEYWORD2
 onStopBlinking	KEYWORD2
 onAlterState	KEYWORD2
-getCurrentState	KEYWORD2
+
+# Getters
+getState	KEYWORD2
+getStringState	KEYWORD2
 getPinOn	KEYWORD2
+
 
 #######################################
 # Constants (LITERAL1)
 #######################################
+
+# Macros
 NO_PIN	LITERAL1
-NO_INTERVAL	LITERAL1
 DEFAULT_GREEN_INTERVAL	LITERAL1
 DEFAULT_YELLOW_INTERVAL	LITERAL1
 DEFAULT_RED_INTERVAL	LITERAL1
 DEFAULT_MIN_GREEN_TIME	LITERAL1
 BLINKING_INTERVAL	LITERAL1
+
+# enum State
+GREEN_STATE	LITERAL1
+YELLOW_STATE	LITERAL1
+RED_STATE	LITERAL1
+DISABLED_STATE	LITERAL1
+BLINKING_STATE	LITERAL1
+ERROR_STATE	LITERAL1
