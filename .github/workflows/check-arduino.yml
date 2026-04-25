@@ -4,22 +4,21 @@ on:
   push:
   pull_request:
   schedule:
-      # Run every Saturday at 12 AM UTC to catch breakage caused by new rules added to Arduino Lint.
+    # Run every Saturday at 12 PM UTC to catch breakage caused by new rules added to Arduino Lint.
     - cron: "0 12 * * SAT"
   workflow_dispatch:
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   lint:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v6
 
-      - uses: arduino/arduino-lint-action@v2
+      - name: Arduino lint
+        uses: arduino/arduino-lint-action@v2
         with:
           compliance: strict
-          library-manager: submit
+          library-manager: update
           project-type: library

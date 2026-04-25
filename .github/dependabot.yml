@@ -1,0 +1,10 @@
+version: 2
+
+updates:
+  # Configure check for outdated GitHub Actions actions in workflows.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    labels:
+      - "topic: infrastructure"
