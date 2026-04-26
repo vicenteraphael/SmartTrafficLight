@@ -7,7 +7,6 @@ on:
     # Run every Saturday at 12 PM UTC to catch new misspelling detections resulting from dictionary updates.
     - cron: "0 12 * * SAT"
   workflow_dispatch:
-  repository_dispatch:
 
 jobs:
   spellcheck:

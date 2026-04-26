@@ -23,7 +23,7 @@ void print_state() {
     Serial.println(trafficLight.getPinOn());
     
     Serial.print("Current state: ");
-    Serial.println(trafficLight.getStringState());
+    Serial.println(trafficLight.getStateToString());
 }
 
 void setup() {

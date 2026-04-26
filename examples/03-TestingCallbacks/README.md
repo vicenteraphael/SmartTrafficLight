@@ -18,4 +18,4 @@ The library has various built-in event functions that allows dispatching functio
 
 ## Schematic
 
-![Smart Traffic Light | Testing Callbacks | Schematic](/examples/img/traffic-light-schematic.jpeg)
+![Smart Traffic Light | Testing Callbacks | Schematic](/img/traffic-light-schematic.jpeg)

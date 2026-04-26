@@ -1,6 +1,6 @@
 # Hello World
 
-A basic demonstration of how to use the library to create a simple cicle on a traffic light. 
+A basic demonstration of how to use the library to create a simple cycle on a traffic light. 
 
 ## Hardware required
 
@@ -18,4 +18,4 @@ A basic demonstration of how to use the library to create a simple cicle on a tr
 
 ## Schematic
 
-![Smart Traffic Light | Hello World | Schematic](/examples/img/traffic-light-schematic.jpeg)
+![Smart Traffic Light | Hello World | Schematic](/img/traffic-light-schematic.jpeg)

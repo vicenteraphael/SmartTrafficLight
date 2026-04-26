@@ -18,4 +18,4 @@ Let's try out all functionalities of this library together!
 
 ## Schematic
 
-![Smart Traffic Light | All together | Schematic](/examples/img/traffic-light-schematic.jpeg)
+![Smart Traffic Light | All together | Schematic](/img/traffic-light-schematic.jpeg)

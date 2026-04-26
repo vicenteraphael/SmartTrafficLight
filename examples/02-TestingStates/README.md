@@ -18,4 +18,4 @@ The library has a built-in getter method to output the current state in its Fini
 
 ## Schematic
 
-![Smart Traffic Light | Testing States | Schematic](/examples/img/traffic-light-schematic.jpeg)
+![Smart Traffic Light | Testing States | Schematic](/img/traffic-light-schematic.jpeg)

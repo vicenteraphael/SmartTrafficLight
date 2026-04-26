@@ -1,5 +1,8 @@
 #include "SmartTrafficLight.h"
 
+#ifndef LED_BUILTIN
+#define LED_BUILTIN (2)
+#endif
 
 // ================================ CONSTRUCTORS ================================
 
@@ -26,30 +29,35 @@ SmartTrafficLight::SmartTrafficLight(const uint8_t gPin, const uint8_t yPin, con
 
 // ================================ INITIALIZATION ================================
 
-void SmartTrafficLight::printUninitializedError() {
-    Serial.begin(9600);
+void SmartTrafficLight::printUninitializedError() const {
     Serial.println("Fatal: uninitialized...");
     Serial.println("Use attach() to configure the pins");
     Serial.println("Use setIntervals() to customize the traffic light intervals");
     Serial.println("Use begin() to start the traffic light");
 }
 
-void SmartTrafficLight::assertBegun() {
-    if (!begun) {
+bool SmartTrafficLight::assertInitialized() {
+    if (!initialized) {
         printUninitializedError();
+
         state = ERROR_STATE;
-        begun = true;
+        initialized = true;
+
         pinMode(LED_BUILTIN, OUTPUT);
+        lastTimeTransition = millis();
+
+        return false;
     }
+    return !(state == ERROR_STATE);
 }
 
 void SmartTrafficLight::begin() {
     // Safety verification
     if (greenPin == NO_PIN || yellowPin == NO_PIN || redPin == NO_PIN) {
-        assertBegun();
+        assertInitialized();
         return;
     }
-    begun = true;
+    initialized = true;
 
     pinMode(greenPin, OUTPUT);
     pinMode(yellowPin, OUTPUT);
@@ -60,7 +68,6 @@ void SmartTrafficLight::begin() {
 
 
 // ================================ TRAFFIC LIGHT HANDLING ================================
-
 
 void SmartTrafficLight::turnOn(const uint8_t ledPin){
     lastTimeTransition = millis();
@@ -109,24 +116,27 @@ void SmartTrafficLight::handleBlinking() {
 }
 
 void SmartTrafficLight::handleError() {
-    if (digitalRead(LED_BUILTIN) == HIGH) {
+    if (isLedBuiltinBlinking) {
         if (millis() - lastTimeTransition >= BLINKING_INTERVAL) {
             lastTimeTransition = millis();
             digitalWrite(LED_BUILTIN, LOW);
+            isLedBuiltinBlinking = false;
         }
     } else {
         if (millis() - lastTimeTransition >= BLINKING_INTERVAL) {
             lastTimeTransition = millis();
             digitalWrite(LED_BUILTIN, HIGH);
+            isLedBuiltinBlinking = true;
         }
     }
 }
 
+
 // ================================ STATE MACHINE ================================
 
 void SmartTrafficLight::goTo(State newState) {
-    assertBegun();
-    if (state == ERROR_STATE) return;
+    if (!assertInitialized()) return;
+
     switch (newState) {
         case GREEN_STATE:
             if (state == DISABLED_STATE && onEn) onEn();
@@ -134,21 +144,30 @@ void SmartTrafficLight::goTo(State newState) {
             if (onGreen) onGreen();
             turnOn(greenPin);
             break;
+
         case YELLOW_STATE:
             if (onYellow) onYellow();
             turnOn(yellowPin);
             break;
+
         case RED_STATE:
             if (onRed) onRed();
             turnOn(redPin);
             break;
+
         case BLINKING_YELLOW_STATE:
             if (onStartBlink) onStartBlink();
             turnOn(yellowPin);
             break;
+
         case DISABLED_STATE:
             if (onDis) onDis();
             turnOff();
+            break;
+
+        default:
+            break;
+
     }
     state = newState;
     if (onAlter) onAlter();
@@ -172,11 +191,12 @@ void SmartTrafficLight::update() {
             handleBlinking();
             break;
 
-        case DISABLED_STATE:
-            break;
-
         case ERROR_STATE:
             handleError();
+            break;
+
+        default:
+            break;
     }
 }
 
@@ -186,40 +206,40 @@ void SmartTrafficLight::update() {
 // State control functions
 
 void SmartTrafficLight::enable() {
-    assertBegun();
+    if (!assertInitialized()) return;
     if (state != DISABLED_STATE) return;
 
     goTo(GREEN_STATE);
 }
 
 void SmartTrafficLight::disable() {
-    assertBegun();
+    if (!assertInitialized()) return;
     if (state == DISABLED_STATE) return;
 
     goTo(DISABLED_STATE);
 }
 
 void SmartTrafficLight::startBlinking() {
-    assertBegun();
+    if (!assertInitialized()) return;
     if (state == BLINKING_YELLOW_STATE) return;
     
     goTo(BLINKING_YELLOW_STATE);
 }
 
 void SmartTrafficLight::stopBlinking() {
-    assertBegun();
+    if (!assertInitialized()) return;
     if (state != BLINKING_YELLOW_STATE) return;
     
     goTo(GREEN_STATE);
 }
 
 void SmartTrafficLight::turnGreen() {
-    assertBegun();
-    if (state == RED_STATE) goTo(YELLOW_STATE);
+    if (!assertInitialized()) return;
+    if (state == RED_STATE) goTo(GREEN_STATE);
 }
 
 void SmartTrafficLight::turnRed() {
-    assertBegun();
+    if (!assertInitialized()) return;
     if (state == GREEN_STATE) goTo(YELLOW_STATE);
     else if (state == YELLOW_STATE) goTo(RED_STATE);
 }
@@ -260,14 +280,28 @@ void SmartTrafficLight::onAlterState(void (*func)()) {
 
 // Getter functions
 
-State SmartTrafficLight::getState() {
+State SmartTrafficLight::getState() const {
     return state;
 }
 
-const char* SmartTrafficLight::getStringState() {
-    return stringStates[state];
+const char* SmartTrafficLight::getStateToString() const {
+    switch (state) {
+        case GREEN_STATE:
+            return "GREEN_STATE";
+        case YELLOW_STATE:
+            return "YELLOW_STATE";
+        case RED_STATE:
+            return "RED_STATE";
+        case BLINKING_YELLOW_STATE:
+            return "BLINKING_YELLOW_STATE";
+        case DISABLED_STATE:
+            return "DISABLED_STATE";
+        case ERROR_STATE:
+            return "ERROR_STATE";
+    }
+    return "UNKNOWN_STATE"; // just to avoid warnings :/
 }
 
-const uint8_t SmartTrafficLight::getPinOn() {
+uint8_t SmartTrafficLight::getPinOn() const {
     return pinOn;
 }

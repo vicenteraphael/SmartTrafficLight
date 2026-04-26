@@ -21,15 +21,6 @@ enum State {
     ERROR_STATE
 };
 
-const char stringStates[][22] = {
-    "GREEN_STATE",
-    "YELLOW_STATE",
-    "RED_STATE",
-    "BLINKING_YELLOW_STATE",
-    "DISABLED_STATE",
-    "ERROR_STATE"
-};
-
 class SmartTrafficLight {
     private:
         uint8_t greenPin = NO_PIN;
@@ -42,15 +33,17 @@ class SmartTrafficLight {
         unsigned long redInterval = DEFAULT_RED_INTERVAL;
         unsigned long minGreenTime = DEFAULT_MIN_GREEN_TIME;
 
-        bool begun = false;
+        bool isLedBuiltinBlinking = false;
+
+        bool initialized = false;
         bool pressed = false;
         unsigned long lastTimeTransition = 0;
 
         State state = DISABLED_STATE;
         uint8_t pinOn = NO_PIN;
         
-        void assertBegun();
-        void printUninitializedError();
+        bool assertInitialized();
+        void printUninitializedError() const;
 
         void turnOn(const uint8_t ledPin);
         void turnOff();
@@ -117,9 +110,9 @@ class SmartTrafficLight {
         void onStopBlinking(void (*func)());
         void onAlterState(void (*func)());
 
-        State getState();
-        const char* getStringState();
-        const uint8_t getPinOn();
+        State getState() const;
+        const char* getStateToString() const;
+        uint8_t getPinOn() const;
 };
 
 #endif
