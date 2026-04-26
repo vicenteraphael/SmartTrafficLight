@@ -1,8 +1,15 @@
 # SmartTrafficLight
 
+[![Check Arduino](https://github.com/vicenteraphael/SmartTrafficLight/actions/workflows/check-arduino.yml/badge.svg)](https://github.com/vicenteraphael/SmartTrafficLight/actions/workflows/check-arduino.yml)
+[![Compile Examples](https://github.com/vicenteraphael/SmartTrafficLight/actions/workflows/compile-examples.yml/badge.svg)](https://github.com/vicenteraphael/SmartTrafficLight/actions/workflows/compile-examples.yml)
+[![Dependabot Updates](https://github.com/vicenteraphael/SmartTrafficLight/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/vicenteraphael/SmartTrafficLight/actions/workflows/dependabot/dependabot-updates)
+[![Spell Check](https://github.com/vicenteraphael/SmartTrafficLight/actions/workflows/spell-check.yml/badge.svg)](https://github.com/vicenteraphael/SmartTrafficLight/actions/workflows/spell-check.yml)
 
 ![Arduino](https://img.shields.io/badge/platform-Arduino-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
+
+[![arduino-library-badge](https://www.ardu-badge.com/badge/SmartTrafficLight.svg?)](https://www.ardu-badge.com/SmartTrafficLight)
+![PlatformIO](https://img.shields.io/badge/PlatformIO-compatible-orange)
 
 An easy-to-use, non-blocking Arduino library for building smart traffic light systems with support for pedestrian buttons and event-driven behavior.
 
