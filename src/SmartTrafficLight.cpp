@@ -29,16 +29,21 @@ SmartTrafficLight::SmartTrafficLight(const uint8_t gPin, const uint8_t yPin, con
 
 // ================================ INITIALIZATION ================================
 
+#ifndef UNITY_TEST
 void SmartTrafficLight::printUninitializedError() const {
     Serial.println("Fatal: uninitialized...");
     Serial.println("Use attach() to configure the pins");
     Serial.println("Use setIntervals() to customize the traffic light intervals");
     Serial.println("Use begin() to start the traffic light");
 }
+#else // Ignore Serial during tests
+    void SmartTrafficLight::printUninitializedError() const {}
+#endif
 
 bool SmartTrafficLight::assertInitialized() {
     if (!initialized) {
         printUninitializedError();
+        printf("CUZAO");
 
         state = ERROR_STATE;
         initialized = true;
@@ -82,7 +87,7 @@ void SmartTrafficLight::turnOn(const uint8_t ledPin){
 void SmartTrafficLight::turnOff() {
     lastTimeTransition = millis();
 
-    digitalWrite(pinOn, LOW);
+    if (pinOn != NO_PIN) digitalWrite(pinOn, LOW);
     pinOn = NO_PIN;
 }
 
