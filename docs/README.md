@@ -9,10 +9,10 @@ control of different states and the implementation of event-driven behaviour suc
 
 ### Using the Arduino IDE (recommended):
 
-1. Access `Sketch` → `Include Library` `Manage Libraries... (Ctrl + Shift + I)`
+1. Access `Sketch` → `Include Library` → `Manage Libraries... (Ctrl + Shift + I)`
 2. Install `SmartTrafficLight` by Raphael Vicente de Oliveira
 3. Include it in your code:
-    ```
+    ```cpp
     #include <SmartTrafficLight.h>
     ```
 
@@ -25,7 +25,6 @@ control of different states and the implementation of event-driven behaviour suc
 2. Move it to your `Arduino/libraries/` folder
 3. Restart the Arduino IDE
 4. Include it in your code:
-
     ```cpp
     #include <SmartTrafficLight.h>
     ```

@@ -40,10 +40,10 @@ To install the library, follow these steps:
 
 #### Using the Arduino IDE (recommended):
 
-1. Access `Sketch` → `Include Library` `Manage Libraries... (Ctrl + Shift + I)`
+1. Access `Sketch` → `Include Library` → `Manage Libraries... (Ctrl + Shift + I)`
 2. Install `SmartTrafficLight` by Raphael Vicente de Oliveira
 3. Include it in your code:
-    ```
+    ```cpp
     #include <SmartTrafficLight.h>
     ```
 
@@ -56,13 +56,11 @@ To install the library, follow these steps:
 2. Move it to your `Arduino/libraries/` folder
 3. Restart the Arduino IDE
 4. Include it in your code:
-
     ```cpp
     #include <SmartTrafficLight.h>
     ```
-    ```
 
-The example below shows the minimal setup required to run the traffic light
+The example below shows the minimal setup required to run the traffic light:
 
 ```cpp
 
