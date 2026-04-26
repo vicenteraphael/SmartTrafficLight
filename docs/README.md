@@ -5,23 +5,37 @@ This library allows using an Arduino Board to easily and efficiently manage traf
 The SmartTrafficLight uses a Finite State Machine (FSM), which not only permits non-blocking operation, but
 control of different states and the implementation of event-driven behaviour such as dispatching of customized alerts and messages triggered by specific events.
 
-# Installation
+## Installation
 
-1. Download the repository by running the following command:
-    ```bash copy
+### Using the Arduino IDE (recommended):
+
+1. Access `Sketch` → `Include Library` `Manage Libraries... (Ctrl + Shift + I)`
+2. Install `SmartTrafficLight` by Raphael Vicente de Oliveira
+3. Include it in your code:
+    ```
+    #include <SmartTrafficLight.h>
+    ```
+
+### Manual installation
+
+1. Clone this repository (or download `.zip`):
+    ```bash
     git clone https://github.com/vicenteraphael/SmartTrafficLight.git
     ```
 2. Move it to your `Arduino/libraries/` folder
 3. Restart the Arduino IDE
 4. Include it in your code:
 
-    ```cpp copy
+    ```cpp
     #include <SmartTrafficLight.h>
     ```
 
-# Circuit
+---
 
-## Hardware required
+
+## Circuit
+
+### Hardware required
 
 * Arduino Board
 * 3 LEDs
@@ -29,7 +43,7 @@ control of different states and the implementation of event-driven behaviour suc
 * Button (optional)
 * Hook-up wires
 
-## Specifications
+### Specifications
 
 1. Reserve 3 digital pins from the Arduino board to three LEDs for the traffic light, which are usually green, yellow and red. 
 
@@ -41,11 +55,11 @@ control of different states and the implementation of event-driven behaviour suc
 
 > **Please note** that a resistor for the button is not needed once this library uses pin mode `INPUT_PULLUP`, which already uses the Arduino internal resistor for this matter.
 
-## Schematic
+### Schematic
 
-![SmartTrafficLight Circuit](/examples/img/traffic-light-schematic.jpeg)
+![SmartTrafficLight Circuit](/img/traffic-light-schematic.jpeg)
 
-# Examples
+## Examples
 
 1. [Hello World](/examples/01-HelloWorld/README.md): an introduction to the livrary
 2. [Testing States](/examples/02-TestingStates/README.md): an example of how to control the library states

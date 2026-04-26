@@ -20,7 +20,7 @@
 5. [Getter methods](#getter-methods)
     - [`getPinOn()`](#getpinon)
     - [`getState()`](#getstate)
-    - [`getStringState()`](#getstringstate)
+    - [`getStateToString()`](#getstatetostring)
 6. [Event functions and callbacks](#event-functions-and-callbacks)
     - [`onTurnGreen()`](#onturngreen)
     - [`onTurnYellow()`](#onturnyellow)
@@ -38,21 +38,33 @@
 
 To install the library, follow these steps:
 
-1. Download the repository by running the following command:
-    ```bash copy
+#### Using the Arduino IDE (recommended):
+
+1. Access `Sketch` → `Include Library` `Manage Libraries... (Ctrl + Shift + I)`
+2. Install `SmartTrafficLight` by Raphael Vicente de Oliveira
+3. Include it in your code:
+    ```
+    #include <SmartTrafficLight.h>
+    ```
+
+#### Manual installation
+
+1. Clone this repository (or download `.zip`):
+    ```bash
     git clone https://github.com/vicenteraphael/SmartTrafficLight.git
     ```
 2. Move it to your `Arduino/libraries/` folder
 3. Restart the Arduino IDE
 4. Include it in your code:
 
-    ```cpp copy
+    ```cpp
     #include <SmartTrafficLight.h>
+    ```
     ```
 
 The example below shows the minimal setup required to run the traffic light
 
-```cpp copy
+```cpp
 
 #include <SmartTrafficLight.h>
 
@@ -70,7 +82,7 @@ void loop() {
 
 Or with [`attach()`](#attach):
 
-```cpp copy
+```cpp
 
 #include <SmartTrafficLight.h>
 
@@ -122,7 +134,7 @@ Creates an instance of `SmartTrafficLight` and, optionally, configures the pins 
 
 **Definition:**
 
-```cpp copy
+```cpp
 SmartTrafficLight() = default
 SmartTrafficLight(const uint8_t gPin, const uint8_t yPin, const uint8_t rPin, const uint8_t bPin = NO_PIN)
 ```
@@ -142,7 +154,7 @@ SmartTrafficLight(const uint8_t gPin, const uint8_t yPin, const uint8_t rPin, co
 - `SmartTrafficLight`
 
 **Syntax:**
-```cpp copy
+```cpp
 SmartTrafficLight();
 SmartTrafficLight(12, 8, 7);
 SmartTrafficLight(12, 8, 7, 2);
@@ -156,7 +168,7 @@ In the second case, the LED pins are being configured, except for the button pin
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 #define GREEN_PIN 12
@@ -176,7 +188,7 @@ If the parameters are omitted, creates the instance without reference to the pin
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 SmartTrafficLight trafficLight{};
@@ -202,7 +214,7 @@ Configures the pins to be used. Can be called to configure the pins instead of [
 
 **Definition:**
 
-```cpp copy
+```cpp
 void attach(const uint8_t gPin, const uint8_t yPin, const uint8_t rPin, const uint8_t bPin = NO_PIN)
 ```
 
@@ -222,7 +234,7 @@ void attach(const uint8_t gPin, const uint8_t yPin, const uint8_t rPin, const ui
 
 
 **Syntax:**
-```cpp copy
+```cpp
 trafficLight.attach(12, 8, 7);
 trafficLight.attach(12, 8, 7, 2);
 ```
@@ -230,7 +242,7 @@ trafficLight.attach(12, 8, 7, 2);
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 #define GREEN_PIN 12
@@ -266,7 +278,7 @@ Configures each individual LED display timing, along with the minimum green time
 
 **Definition:**
 
-```cpp copy
+```cpp
 void setIntervals(const unsigned long gInterval, const unsigned long yInterval, const unsigned long rInterval, const unsigned long minGTime = DEFAULT_MIN_GREEN_TIME)
 ```
 
@@ -280,7 +292,7 @@ void setIntervals(const unsigned long gInterval, const unsigned long yInterval, 
 
 > **Note:** `DEFAULT_MIN_GREEN_TIME` is an internal macro for the default minimum green time (5000 milliseconds). The other literals are:
 
-```cpp copy
+```cpp
 #define DEFAULT_GREEN_INTERVAL (10000)
 #define DEFAULT_YELLOW_INTERVAL (2000)
 #define DEFAULT_RED_INTERVAL (5000)
@@ -297,7 +309,7 @@ void setIntervals(const unsigned long gInterval, const unsigned long yInterval, 
 
 **Syntax:**
 
-```cpp copy
+```cpp
 trafficLight.setIntervals(10000, 2000, 5000);
 trafficLight.setIntervals(10000, 2000, 5000, 3000);
 
@@ -306,7 +318,7 @@ trafficLight.setIntervals(10000, 2000, 5000, 3000);
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 #define GREEN_TIME 60000
@@ -337,7 +349,7 @@ void loop() {}
 
 ⚠️ **REQUIRED** - This method must be called before using the traffic light
 
-Initializes the system and checks if the pins were configured successfully. If not, the following message is displayed on the serial monitor and the program enters `ERROR_STATE`, which is a non-blocking state that triggers a constant blinking on the `LED_BUILTIN` pin (usually digital pin n° 13).
+Initializes the system and checks if the pins were configured successfully. If not, the following message is displayed on the serial monitor (if `Serial.begin()` was previously called) and the program enters `ERROR_STATE`, which is a non-blocking state that triggers a constant blinking on the `LED_BUILTIN` pin (usually digital pin nº 13 or nº 2).
 
 ```
 Fatal: uninitialized...
@@ -351,7 +363,7 @@ Use begin() to start the traffic light
 
 **Definition:**
 
-```cpp copy
+```cpp
 void begin()
 ```
 
@@ -368,14 +380,14 @@ void begin()
 
 **Syntax:**
 
-```cpp copy
+```cpp
 trafficLight.begin();
 ```
 
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 #define GREEN_PIN 12
@@ -409,7 +421,7 @@ Updates the current state of the traffic light FSM using millis(). Needs to be c
 
 **Definition:**
 
-```cpp copy
+```cpp
 void update()
 ```
 
@@ -426,14 +438,14 @@ void update()
 
 **Syntax:**
 
-```cpp copy
+```cpp
 trafficLight.update();
 ```
 
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 #define GREEN_PIN 12
@@ -473,7 +485,7 @@ enum State {
 
 In practice, the states can be represented by the following schema:
 
-![SmartTrafficLight | Finite State Machine](/docs/img/fsm.png)
+![SmartTrafficLight | Finite State Machine](/img/fsm.png)
 
 > `Solid line`   = automatic transition (`timeout`) <br>
 > `Dashed line`  = method call (`user-triggered`)
@@ -500,7 +512,7 @@ Changes the current state from `DISABLED_STATE` to `GREEN_STATE`, enabling the t
 
 **Definition:**
 
-```cpp copy
+```cpp
 void enable()
 ```
 
@@ -517,14 +529,14 @@ void enable()
 
 **Syntax:**
 
-```cpp copy
+```cpp
 trafficLight.enable();
 ```
 
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 SmartTrafficLight trafficLight{};
@@ -556,7 +568,7 @@ Changes the current state, whatever it may be, to `DISABLED_STATE`, taking the e
 
 **Definition:**
 
-```cpp copy
+```cpp
 void disable()
 ```
 
@@ -573,14 +585,14 @@ void disable()
 
 **Syntax:**
 
-```cpp copy
+```cpp
 trafficLight.disable();
 ```
 
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 SmartTrafficLight trafficLight(12, 11, 10, 9);
@@ -612,7 +624,7 @@ Changes the current state, whatever it may be, to `BLINKING_YELLOW_STATE`, also 
 
 **Definition:**
 
-```cpp copy
+```cpp
 void startBlinking()
 ```
 
@@ -629,14 +641,14 @@ void startBlinking()
 
 **Syntax:**
 
-```cpp copy
+```cpp
 trafficLight.startBlinking();
 ```
 
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 SmartTrafficLight trafficLight{};
@@ -666,7 +678,7 @@ Changes the current state from `BLINKING_YELLOW_STATE` to `GREEN_STATE`, stoppin
 
 **Definition:**
 
-```cpp copy
+```cpp
 void stopBlinking()
 ```
 
@@ -683,14 +695,14 @@ void stopBlinking()
 
 **Syntax:**
 
-```cpp copy
+```cpp
 trafficLight.stopBlinking();
 ```
 
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 SmartTrafficLight trafficLight(12, 11, 10, 9);
@@ -722,7 +734,7 @@ Changes the current state from `RED_STATE` to `GREEN_STATE`. If the current stat
 
 **Definition:**
 
-```cpp copy
+```cpp
 void turnGreen()
 ```
 
@@ -739,14 +751,14 @@ void turnGreen()
 
 **Syntax:**
 
-```cpp copy
+```cpp
 trafficLight.turnGreen();
 ```
 
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 SmartTrafficLight trafficLight{};
@@ -780,7 +792,7 @@ If the current state is `GREEN_STATE` or `YELLOW_STATE`, starts transition to `R
 
 **Definition:**
 
-```cpp copy
+```cpp
 void turnRed()
 ```
 
@@ -795,14 +807,14 @@ void turnRed()
 
 **Syntax:**
 
-```cpp copy
+```cpp
 trafficLight.turnRed();
 ```
 
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 SmartTrafficLight trafficLight(12, 11, 10, 9);
@@ -842,8 +854,8 @@ Returns the current `HIGH` LED pin. If no pin is currently `HIGH`, returns `NO_P
 
 **Definition:**
 
-```cpp copy
-const uint8_t getPinOn()
+```cpp
+uint8_t getPinOn() const
 ```
 
 
@@ -854,19 +866,19 @@ const uint8_t getPinOn()
 
 **Returns:**
 
-- `const uint8_t`: current `HIGH` LED pin. If no pin is `HIGH`, returns 255
+- `uint8_t`: current `HIGH` LED pin. If no pin is `HIGH`, returns 255
 
 
 **Syntax:**
 
-```cpp copy
+```cpp
 trafficLight.getPinOn();
 ```
 
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 SmartTrafficLight trafficLight{};
@@ -900,8 +912,8 @@ Returns the current state of the FSM, an enum State variable
 
 
 **Definition:**
-```cpp copy
-State getState()
+```cpp
+State getState() const
 ```
 
 
@@ -916,14 +928,14 @@ State getState()
 
 **Syntax:**
 
-```cpp copy
+```cpp
 trafficLight.getState();
 ```
 
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 #define GREEN_PIN 12
@@ -957,7 +969,7 @@ void loop() {
 ---
 
 
-### `getStringState()`
+### `getStateToString()`
 
 
 **Description:**
@@ -966,8 +978,8 @@ Returns the current state of the FSM as a string (`const char*`)
 
 
 **Definition:**
-```cpp copy
-const char *getStringState()
+```cpp
+const char *getStateToString() const
 ```
 
 
@@ -977,19 +989,19 @@ const char *getStringState()
 
 **Returns:**
 
-- `const char*`: current state of the State Machine in string format
+- `const char*`: current state of the State Machine converted to string format
 
 
 **Syntax:**
 
-```cpp copy
-trafficLight.getStringState();
+```cpp
+trafficLight.getStateToString();
 ```
 
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 SmartTrafficLight trafficLight{};
@@ -1002,7 +1014,7 @@ void setup() {
     trafficLight.startBlinking();
 
     // Outputs: BLINKING_YELLOW_STATE
-    Serial.println(trafficLight.getStringState());
+    Serial.println(trafficLight.getStateToString());
 }
 
 void loop() {
@@ -1030,7 +1042,7 @@ Dispatches its callback function when the state is changed to `GREEN_STATE`, tha
 
 **Definition:**
 
-```cpp copy
+```cpp
 void onTurnGreen(void (*func)())
 ```
 
@@ -1047,7 +1059,7 @@ void onTurnGreen(void (*func)())
 
 **Syntax:**
 
-```cpp copy
+```cpp
 trafficLight.onTurnGreen(my_func);
 trafficLight.onTurnGreen([]() {
     doSomething(); // Requires C++11 support
@@ -1057,7 +1069,7 @@ trafficLight.onTurnGreen([]() {
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 SmartTrafficLight trafficLight(12, 11, 10, 9);
@@ -1097,7 +1109,7 @@ Dispatches its callback function when the state is changed to `YELLOW_STATE`, th
 
 **Definition:**
 
-```cpp copy
+```cpp
 void onTurnYellow(void (*func)())
 ```
 
@@ -1114,7 +1126,7 @@ void onTurnYellow(void (*func)())
 
 **Syntax:**
 
-```cpp copy
+```cpp
 trafficLight.onTurnYellow(my_func);
 trafficLight.onTurnYellow([]() {
     doSomething(); // Requires C++11 support
@@ -1124,7 +1136,7 @@ trafficLight.onTurnYellow([]() {
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 SmartTrafficLight trafficLight{};
@@ -1166,7 +1178,7 @@ Dispatches its callback function when the state is changed to `RED_STATE`, that 
 
 **Definition:**
 
-```cpp copy
+```cpp
 void onTurnRed(void (*func)())
 ```
 
@@ -1183,7 +1195,7 @@ void onTurnRed(void (*func)())
 
 **Syntax:**
 
-```cpp copy
+```cpp
 trafficLight.onTurnRed(my_func);
 trafficLight.onTurnRed([]() {
     doSomething(); // Requires C++11 support
@@ -1193,7 +1205,7 @@ trafficLight.onTurnRed([]() {
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 SmartTrafficLight trafficLight(12, 11, 10, 9);
@@ -1235,7 +1247,7 @@ Dispatches its callback function when the [`enable()`](#enable) method is called
 **Definition:**
 
 
-```cpp copy
+```cpp
 void onEnable(void (*func)())
 ```
 
@@ -1252,7 +1264,7 @@ void onEnable(void (*func)())
 
 **Syntax:**
 
-```cpp copy
+```cpp
 trafficLight.onEnable(my_func);
 trafficLight.onEnable([]() {
     doSomething(); // Requires C++11 support
@@ -1262,7 +1274,7 @@ trafficLight.onEnable([]() {
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 SmartTrafficLight trafficLight{};
@@ -1307,7 +1319,7 @@ Dispatches its callback function when the state is changed to `DISABLED_STATE`, 
 **Definition:**
 
 
-```cpp copy
+```cpp
 void onDisable(void (*func)())
 ```
 
@@ -1324,7 +1336,7 @@ void onDisable(void (*func)())
 
 **Syntax:**
 
-```cpp copy
+```cpp
 trafficLight.onDisable(my_func);
 trafficLight.onDisable([]() {
     doSomething(); // Requires C++11 support
@@ -1334,7 +1346,7 @@ trafficLight.onDisable([]() {
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 SmartTrafficLight trafficLight(12, 11, 10, 9);
@@ -1377,7 +1389,7 @@ Dispatches its callback function when the state is changed to `BLINKING_YELLOW_S
 
 **Definition:**
 
-```cpp copy
+```cpp
 void onStartBlinking(void (*func)())
 ```
 
@@ -1389,7 +1401,7 @@ void onStartBlinking(void (*func)())
 
 **Syntax:**
 
-```cpp copy
+```cpp
 trafficLight.onStartBlinking(my_func);
 trafficLight.onStartBlinking([]() {
     doSomething(); // Requires C++11 support
@@ -1399,7 +1411,7 @@ trafficLight.onStartBlinking([]() {
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 SmartTrafficLight trafficLight{};
@@ -1444,7 +1456,7 @@ Dispatches its callback function when the state is changed from `BLINKING_YELLOW
 
 **Definition:**
 
-```cpp copy
+```cpp
 void onStopBlinking(void (*func)())
 ```
 
@@ -1461,7 +1473,7 @@ void onStopBlinking(void (*func)())
 
 **Syntax:**
 
-```cpp copy
+```cpp
 trafficLight.onStopBlinking(my_func);
 trafficLight.onStopBlinking([]() {
     doSomething(); // Requires C++11 support
@@ -1471,7 +1483,7 @@ trafficLight.onStopBlinking([]() {
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 SmartTrafficLight trafficLight(12, 11, 10, 9);
@@ -1514,7 +1526,7 @@ Dispatches its callback function when the current state is changed (to any other
 
 **Definition:**
 
-```cpp copy
+```cpp
 void onAlterState(void (*func)())
 ```
 
@@ -1531,7 +1543,7 @@ void onAlterState(void (*func)())
 
 **Syntax:**
 
-```cpp copy
+```cpp
 trafficLight.onAlterState(my_func);
 trafficLight.onAlterState([]() {
     doSomething(); // Requires C++11 support
@@ -1541,7 +1553,7 @@ trafficLight.onAlterState([]() {
 
 **Example:**
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 SmartTrafficLight trafficLight{};
@@ -1581,7 +1593,7 @@ void loop() {
 
 ## Full example usage
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 #define GREEN_PIN (12)

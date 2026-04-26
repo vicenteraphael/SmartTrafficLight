@@ -25,15 +25,26 @@ An easy-to-use, non-blocking Arduino library for building smart traffic light sy
 
 ## Installation
 
-1. Download the repository by running the following command:
-    ```bash copy
+### Using the Arduino IDE (recommended):
+
+1. Access `Sketch` → `Include Library` `Manage Libraries... (Ctrl + Shift + I)`
+2. Install `SmartTrafficLight` by Raphael Vicente de Oliveira
+3. Include it in your code:
+    ```
+    #include <SmartTrafficLight.h>
+    ```
+
+### Manual installation
+
+1. Clone this repository (or download `.zip`):
+    ```bash
     git clone https://github.com/vicenteraphael/SmartTrafficLight.git
     ```
 2. Move it to your `Arduino/libraries/` folder
 3. Restart the Arduino IDE
 4. Include it in your code:
 
-    ```cpp copy
+    ```cpp
     #include <SmartTrafficLight.h>
     ```
 
@@ -42,7 +53,7 @@ An easy-to-use, non-blocking Arduino library for building smart traffic light sy
 
 ## Example usage
 
-```cpp copy
+```cpp
 #include <SmartTrafficLight.h>
 
 #define GREEN_PIN (12)
@@ -90,7 +101,7 @@ void loop() {
 
 Like this:
 
-```cpp copy
+```cpp
 SmartTrafficLight trafficLight(GREEN_PIN, YELLOW_PIN, RED_PIN, BUTTON_PIN);
 ```
 
@@ -111,7 +122,7 @@ This library implements a Finite State Machine (FSM) to ensure non-blocking oper
 
 In practice, the states can be represented by the following schema:
 
-![SmartTrafficLight | Finite State Machine](/docs/img/fsm.png)
+![SmartTrafficLight | Finite State Machine](/img/fsm.png)
 
 > `Solid line`   = automatic transition (`timeout`) <br>
 > `Dashed line`  = method call (`user-triggered`)
@@ -157,7 +168,7 @@ You can attach custom callbacks that will be triggered when the state changes:
 You can use these functions to access state-related attributes:
 
 - `getState()` → returns current state in `enum State` format
-- `getStringState()` → returns current state in `string` format (`const char*`)
+- `getStateToString()` → returns current state in `string` format (`const char*`)
 - `getPinOn()` → returns current `HIGH` LED pin number, returns `NO_PIN` (which is 255) if no pin is `HIGH`
 
 
