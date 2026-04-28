@@ -29,16 +29,21 @@ SmartTrafficLight::SmartTrafficLight(const uint8_t gPin, const uint8_t yPin, con
 
 // ================================ INITIALIZATION ================================
 
+#ifndef UNITY_TEST
 void SmartTrafficLight::printUninitializedError() const {
     Serial.println("Fatal: uninitialized...");
     Serial.println("Use attach() to configure the pins");
     Serial.println("Use setIntervals() to customize the traffic light intervals");
     Serial.println("Use begin() to start the traffic light");
 }
+#else // Ignore Serial during tests
+    void SmartTrafficLight::printUninitializedError() const {}
+#endif
 
 bool SmartTrafficLight::assertInitialized() {
     if (!initialized) {
         printUninitializedError();
+        printf("CUZAO");
 
         state = ERROR_STATE;
         initialized = true;
@@ -82,7 +87,7 @@ void SmartTrafficLight::turnOn(const uint8_t ledPin){
 void SmartTrafficLight::turnOff() {
     lastTimeTransition = millis();
 
-    digitalWrite(pinOn, LOW);
+    if (pinOn != NO_PIN) digitalWrite(pinOn, LOW);
     pinOn = NO_PIN;
 }
 
@@ -137,39 +142,41 @@ void SmartTrafficLight::handleError() {
 void SmartTrafficLight::goTo(State newState) {
     if (!assertInitialized()) return;
 
+    State oldState = state;
+    state = newState;
+
     switch (newState) {
         case GREEN_STATE:
-            if (state == DISABLED_STATE && onEn) onEn();
-            else if (state == BLINKING_YELLOW_STATE && onStopBlink) onStopBlink();
-            if (onGreen) onGreen();
             turnOn(greenPin);
+            if (oldState == DISABLED_STATE && onEn) onEn();
+            else if (oldState == BLINKING_YELLOW_STATE && onStopBlink) onStopBlink();
+            if (onGreen) onGreen();
             break;
 
         case YELLOW_STATE:
-            if (onYellow) onYellow();
             turnOn(yellowPin);
+            if (onYellow) onYellow();
             break;
 
         case RED_STATE:
-            if (onRed) onRed();
             turnOn(redPin);
+            if (onRed) onRed();
             break;
 
         case BLINKING_YELLOW_STATE:
-            if (onStartBlink) onStartBlink();
             turnOn(yellowPin);
+            if (onStartBlink) onStartBlink();
             break;
 
         case DISABLED_STATE:
-            if (onDis) onDis();
             turnOff();
+            if (onDis) onDis();
             break;
 
         default:
             break;
 
     }
-    state = newState;
     if (onAlter) onAlter();
 }
 

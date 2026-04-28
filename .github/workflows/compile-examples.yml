@@ -5,12 +5,18 @@ on:
     paths:
     - ".github/workflows/compile-examples.yml"
     - "examples/**"
+    - "include/**"
     - "src/**"
+    - "library.properties"
+    - "platformio.ini"
   pull_request:
     paths:
     - ".github/workflows/compile-examples.yml"
     - "examples/**"
+    - "include/**"
     - "src/**"
+    - "library.properties"
+    - "platformio.ini"
   schedule:
     # Run every Saturday at 12 PM UTC to catch breakage caused by changes to external resources (libraries, platforms).
     - cron: "0 12 * * SAT"

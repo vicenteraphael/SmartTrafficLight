@@ -1,0 +1,58 @@
+name: Run Tests
+
+on:
+  push:
+    paths:
+      - ".github/workflows/run-tests.yml"
+      - "test/**"
+      - "include/**"
+      - "src/**"
+      - "library.properties"
+      - "platformio.ini"
+  pull_request:
+    paths:
+      - ".github/workflows/run-tests.yml"
+      - "include/**"
+      - "src/**"
+      - "library.properties"
+      - "platformio.ini"
+  schedule:
+    # Run every Saturday at 12 PM UTC to catch breakage caused by changes to external resources (libraries, platforms).
+    - cron: "0 12 * * SAT"
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run ${{ matrix.suite }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        suite:
+          - test_callbacks
+          - test_getters
+          - test_state_control
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Restore PlatformIO cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.platformio
+            ~/.cache/pip
+          key: ${{ runner.os }}-pio-${{ hashFiles('platformio.ini') }}
+
+      - name: Install PlatformIO
+        run: pip install platformio==6.1.18
+
+      - name: Run test
+        run: pio test -e native -f ${{ matrix.suite }} -v

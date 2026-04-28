@@ -1,7 +1,11 @@
 #ifndef SMARTTRAFFICLIGHT_H
 #define SMARTTRAFFICLIGHT_H
 
-#include <Arduino.h>
+#ifdef UNIT_TEST
+  #include <ArduinoFake.h>
+#else
+  #include <Arduino.h>
+#endif
 
 #define NO_PIN (255)
 
