@@ -3,6 +3,7 @@
 [![Check Arduino](https://github.com/vicenteraphael/SmartTrafficLight/actions/workflows/check-arduino.yml/badge.svg)](https://github.com/vicenteraphael/SmartTrafficLight/actions/workflows/check-arduino.yml)
 [![Compile Examples](https://github.com/vicenteraphael/SmartTrafficLight/actions/workflows/compile-examples.yml/badge.svg)](https://github.com/vicenteraphael/SmartTrafficLight/actions/workflows/compile-examples.yml)
 [![Dependabot Updates](https://github.com/vicenteraphael/SmartTrafficLight/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/vicenteraphael/SmartTrafficLight/actions/workflows/dependabot/dependabot-updates)
+[![Run Tests](https://github.com/vicenteraphael/SmartTrafficLight/actions/workflows/run-tests.yml/badge.svg)](https://github.com/vicenteraphael/SmartTrafficLight/actions/workflows/run-tests.yml)
 [![Spell Check](https://github.com/vicenteraphael/SmartTrafficLight/actions/workflows/spell-check.yml/badge.svg)](https://github.com/vicenteraphael/SmartTrafficLight/actions/workflows/spell-check.yml)
 
 ![Arduino](https://img.shields.io/badge/platform-Arduino-blue)
