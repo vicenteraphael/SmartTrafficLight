@@ -2,7 +2,20 @@ name: Run tests
 
 on:
   push:
+    paths:
+      - ".github/workflows/run-tests.yml"
+      - "test/**"
+      - "include/**"
+      - "src/**"
+      - "library.properties"
+      - "platformio.ini"
   pull_request:
+    paths:
+      - ".github/workflows/run-tests.yml"
+      - "include/**"
+      - "src/**"
+      - "library.properties"
+      - "platformio.ini"
   schedule:
     # Run every Saturday at 12 PM UTC to catch breakage caused by changes to external resources (libraries, platforms).
     - cron: "0 12 * * SAT"
