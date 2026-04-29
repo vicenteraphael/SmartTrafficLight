@@ -5,6 +5,7 @@ A basic demonstration of how to use the library to create a simple cycle on a tr
 ## Hardware required
 
 * Arduino Board
+* Breadbord
 * 3 LEDs
 * 3 Resistors (220-330 Ω)
 * Button (optional)

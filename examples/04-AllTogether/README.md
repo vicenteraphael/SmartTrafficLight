@@ -5,6 +5,7 @@ Let's try out all functionalities of this library together!
 ## Hardware required
 
 * Arduino Board
+* Breadbord
 * 3 LEDs
 * 3 Resistors (220Ω-1000Ω should work)
 * Button (optional)

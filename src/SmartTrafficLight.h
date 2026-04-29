@@ -66,7 +66,7 @@ class SmartTrafficLight {
         void (*onDis)() = nullptr;
         void (*onStartBlink)() = nullptr;
         void (*onStopBlink)() = nullptr;
-        void (*onAlter)() = nullptr;
+        void (*onChanged)() = nullptr;
 
         void goTo(State state);
 
@@ -98,7 +98,7 @@ class SmartTrafficLight {
 
         void update();
         
-        void enable();
+        void enable(State initalState = GREEN_STATE);
         void disable();
         void startBlinking();
         void stopBlinking();
@@ -112,7 +112,7 @@ class SmartTrafficLight {
         void onDisable(void (*func)());
         void onStartBlinking(void (*func)());
         void onStopBlinking(void (*func)());
-        void onAlterState(void (*func)());
+        void onStateChanged(void (*func)());
 
         State getState() const;
         const char* getStateToString() const;

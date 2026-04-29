@@ -8,7 +8,7 @@ void test_onEnable();
 void test_onDisable();
 void test_onStartBlinking();
 void test_onStopBlinking();
-void test_onAlterState();
+void test_onStateChanged();
 
 using namespace fakeit;
 
@@ -32,7 +32,7 @@ int runUnityTests() {
     RUN_TEST(test_onDisable);
     RUN_TEST(test_onStartBlinking);
     RUN_TEST(test_onStopBlinking);
-    RUN_TEST(test_onAlterState);
+    RUN_TEST(test_onStateChanged);
 
     return UNITY_END();
 }

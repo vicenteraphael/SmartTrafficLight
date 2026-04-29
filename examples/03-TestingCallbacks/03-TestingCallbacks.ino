@@ -15,34 +15,14 @@
 
 
 // --------------- CALLBACK FUNCTIONS ---------------
- 
-void print_turning_green() {
-	Serial.println("Turning green...");
-}
 
-void print_turning_yellow() {
-	Serial.println("Turning yellow...");
-}
-
-void print_turning_red() {
-	Serial.println("Turning red...");
-}
-
-void print_enable() {
-	Serial.println("Enabling...");
-}
-
-void print_disable() {
-	Serial.println("Disabling...");
-}
-
-void print_start_blinking() {
-	Serial.println("Starting blinking...");
-}
-
-void print_stop_blinking() {
-	Serial.println("Stopping blinking...");
-}
+void print_turning_green();
+void print_turning_yellow();
+void print_turning_red();
+void print_enable();
+void print_disable();
+void print_start_blinking();
+void print_stop_blinking();
 
 
 // --------------- PROGRAM ---------------
@@ -78,4 +58,35 @@ void loop(){
   	else if (millis() >= 5000) {
         trafficLight.disable();
     }
+}
+
+
+// --------------- CALLBACK FUNCTIONS ---------------
+
+void print_turning_green() {
+	Serial.println("Turning green...");
+}
+
+void print_turning_yellow() {
+	Serial.println("Turning yellow...");
+}
+
+void print_turning_red() {
+	Serial.println("Turning red...");
+}
+
+void print_enable() {
+	Serial.println("Enabling...");
+}
+
+void print_disable() {
+	Serial.println("Disabling...");
+}
+
+void print_start_blinking() {
+	Serial.println("Starting blinking...");
+}
+
+void print_stop_blinking() {
+	Serial.println("Stopping blinking...");
 }

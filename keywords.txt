@@ -38,11 +38,11 @@ onEnable	KEYWORD2
 onDisable	KEYWORD2
 onStartBlinking	KEYWORD2
 onStopBlinking	KEYWORD2
-onAlterState	KEYWORD2
+onStateChanged	KEYWORD2
 
 # Getters
 getState	KEYWORD2
-getStringState	KEYWORD2
+getStateToString	KEYWORD2
 getPinOn	KEYWORD2
 
 

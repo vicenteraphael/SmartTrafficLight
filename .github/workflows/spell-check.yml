@@ -2,21 +2,7 @@ name: Spell Check
 
 on:
   push:
-    paths:
-      - ".github/workflows/spell-check.yml"
-      - "*.md"
-      - "docs/**"
-      - "examples/**"
-      - "include/**"
-      - "src/**"
   pull_request:
-    paths:
-      - ".github/workflows/spell-check.yml"
-      - "*.md"
-      - "docs/**"
-      - "examples/**"
-      - "include/**"
-      - "src/**"
   schedule:
     # Run every Saturday at 12 PM UTC to catch new misspelling detections resulting from dictionary updates.
     - cron: "0 12 * * SAT"

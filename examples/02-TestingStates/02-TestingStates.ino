@@ -19,31 +19,31 @@
 SmartTrafficLight trafficLight{};
 
 void print_state() {
-    Serial.print("Pin on: ");
-    Serial.println(trafficLight.getPinOn());
-    
-    Serial.print("Current state: ");
-    Serial.println(trafficLight.getStateToString());
+  Serial.print("Pin on: ");
+  Serial.println(trafficLight.getPinOn());
+  
+  Serial.print("Current state: ");
+  Serial.println(trafficLight.getStateToString());
 }
 
 void setup() {
-  	Serial.begin(9600);
-  
-  	trafficLight.attach(GREEN_PIN, YELLOW_PIN, RED_PIN, BUTTON_PIN);
-    trafficLight.setIntervals(GREEN_INTERVAL, YELLOW_INTERVAL, RED_INTERVAL, MIN_GREEN_TIME);
+  Serial.begin(9600);
 
-    trafficLight.onAlterState(print_state);
-  	
-  	trafficLight.begin();
-    trafficLight.startBlinking();
+  trafficLight.attach(GREEN_PIN, YELLOW_PIN, RED_PIN, BUTTON_PIN);
+  trafficLight.setIntervals(GREEN_INTERVAL, YELLOW_INTERVAL, RED_INTERVAL, MIN_GREEN_TIME);
+
+  trafficLight.onStateChanged(print_state);
+  
+  trafficLight.begin();
+  trafficLight.startBlinking();
 }
 
 void loop(){
-    trafficLight.update();
-  	if (millis() >= 10000) {
-      trafficLight.enable();
-    }
-  	else if (millis() >= 5000) {
-      trafficLight.disable();
-    } 
+  trafficLight.update();
+  if (millis() >= 10000) {
+    trafficLight.enable();
+  }
+  else if (millis() >= 5000) {
+    trafficLight.disable();
+  } 
 }

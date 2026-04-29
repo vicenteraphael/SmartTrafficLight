@@ -21,11 +21,11 @@ static void test_callback() {
     called_state = tl.getState();
 }
 
-void test_onAlterState() {
+void test_onStateChanged() {
     tl.setIntervals(TL_INTERVAL, TL_INTERVAL, TL_INTERVAL);
     tl.begin();
 
-    tl.onAlterState(test_callback);
+    tl.onStateChanged(test_callback);
     
 
     // Test GREEN_STATE

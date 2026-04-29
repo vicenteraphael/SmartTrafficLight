@@ -166,7 +166,7 @@ You can attach custom callbacks that will be triggered when the state changes:
 - `onDisable()` → called when the system is disabled
 - `onStartBlinking()` → called when the system enters blinking mode
 - `onStopBlinking()` → called when the system stops blinking
-- `onAlterState()` → called whenever the state is changed
+- `onStateChanged()` → called whenever the state is changed
 
 > **Note:** if the event functions isn't set up, the call is ignored when the state occurs
 

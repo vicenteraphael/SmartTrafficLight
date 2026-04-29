@@ -5,6 +5,7 @@ The library has a built-in getter method to output the current state in its Fini
 ## Hardware required
 
 * Arduino Board
+* Breadbord
 * 3 LEDs
 * 3 Resistors (220-330 Ω)
 * Button (optional)

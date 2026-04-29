@@ -177,7 +177,7 @@ void SmartTrafficLight::goTo(State newState) {
             break;
 
     }
-    if (onAlter) onAlter();
+    if (onChanged) onChanged();
 }
 
 void SmartTrafficLight::update() {
@@ -212,11 +212,11 @@ void SmartTrafficLight::update() {
 
 // State control functions
 
-void SmartTrafficLight::enable() {
+void SmartTrafficLight::enable(State initialState = GREEN_STATE) {
     if (!assertInitialized()) return;
     if (state != DISABLED_STATE) return;
 
-    goTo(GREEN_STATE);
+    goTo(initialState);
 }
 
 void SmartTrafficLight::disable() {
@@ -281,8 +281,8 @@ void SmartTrafficLight::onStopBlinking(void (*func)()) {
     onStopBlink = func;
 }
 
-void SmartTrafficLight::onAlterState(void (*func)()) {
-    onAlter = func;
+void SmartTrafficLight::onStateChanged(void (*func)()) {
+    onChanged = func;
 }
 
 // Getter functions

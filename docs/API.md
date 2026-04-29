@@ -2,35 +2,35 @@
 
 
 ## Table of contents
-1. [Quick start](#quick-start)
-2. [Constructors](#constructors)
-    - [`SmartTrafficLight()`](#smarttrafficlight)
+1. [Quick start](#Quick-start)
+2. [Constructors](#Constructors)
+    - [`SmartTrafficLight()`](#SmartTrafficLight)
     - [`attach()`](#attach)
-    - [`setIntervals()`](#setintervals)
-3. [Initialization and update](#initialization-and-update)
+    - [`setIntervals()`](#setIntervals)
+3. [Initialization and update](#Initialization-and-update)
     - [`begin()`](#begin)
     - [`update()`](#update)
-4. [State Control](#state-control)
+4. [State Control](#State-Control)
     - [`enable()`](#enable)
     - [`disable()`](#disable)
-    - [`startBlinking()`](#startblinking)
-    - [`stopBlinking()`](#stopblinking)
-    - [`turnGreen()`](#turngreen)
-    - [`turnRed()`](#turnred)
+    - [`startBlinking()`](#startBlinking)
+    - [`stopBlinking()`](#stopBlinking)
+    - [`turnGreen()`](#turnGreen)
+    - [`turnRed()`](#turnRed)
 5. [Getter methods](#getter-methods)
-    - [`getPinOn()`](#getpinon)
-    - [`getState()`](#getstate)
-    - [`getStateToString()`](#getstatetostring)
-6. [Event functions and callbacks](#event-functions-and-callbacks)
-    - [`onTurnGreen()`](#onturngreen)
-    - [`onTurnYellow()`](#onturnyellow)
-    - [`onTurnRed()`](#onturnred)
-    - [`onEnable()`](#onenable)
-    - [`onDisable()`](#ondisable)
-    - [`onStartBlinking()`](#onstartblinking)
-    - [`onStopBlinking()`](#onstopblinking)
-    - [`onAlterState()`](#onalterstate)
-7. [Full example usage](#full-example-usage)
+    - [`getPinOn()`](#getPinOn)
+    - [`getState()`](#getState)
+    - [`getStateToString()`](#getStateToString)
+6. [Event functions and callbacks](#Event-functions-and-callbacks)
+    - [`onTurnGreen()`](#onTurnGreen)
+    - [`onTurnYellow()`](#onTurnYellow)
+    - [`onTurnRed()`](#onTurnRed)
+    - [`onEnable()`](#onEnable)
+    - [`onDisable()`](#onDisable)
+    - [`onStartBlinking()`](#onStartBlinking)
+    - [`onStopBlinking()`](#onStopBlinking)
+    - [`onStateChanged()`](#onStateChanged)
+7. [Full example usage](#Full-example-usage)
 
 ---
 
@@ -505,13 +505,13 @@ By default, the system starts on `DISABLED_STATE`
 
 ⚠️ **REQUIRED** - This method must be called to start operation
 
-Changes the current state from `DISABLED_STATE` to `GREEN_STATE`, enabling the traffic light for use. If the current state is different from `DISABLED_STATE`, the call is ignored.
+Changes the current state from `DISABLED_STATE` to `GREEN_STATE` (or any other specified state), enabling the traffic light for use. If the current state is different from `DISABLED_STATE`, the call is ignored.
 
 
 **Definition:**
 
 ```cpp
-void enable()
+void enable(State initialState = GREEN_STATE)
 ```
 
 
@@ -529,6 +529,8 @@ void enable()
 
 ```cpp
 trafficLight.enable();
+trafficLight.enable(YELLOW_STATE);
+trafficLight.enable(RED_STATE);
 ```
 
 
@@ -1514,7 +1516,7 @@ void loop() {
 ---
 
 
-### `onAlterState()`
+### `onStateChanged()`
 
 
 **Description:**
@@ -1525,7 +1527,7 @@ Dispatches its callback function when the current state is changed (to any other
 **Definition:**
 
 ```cpp
-void onAlterState(void (*func)())
+void onStateChanged(void (*func)())
 ```
 
 
@@ -1542,8 +1544,8 @@ void onAlterState(void (*func)())
 **Syntax:**
 
 ```cpp
-trafficLight.onAlterState(my_func);
-trafficLight.onAlterState([]() {
+trafficLight.onStateChanged(my_func);
+trafficLight.onStateChanged([]() {
     doSomething(); // Requires C++11 support
 });
 ```
@@ -1556,8 +1558,8 @@ trafficLight.onAlterState([]() {
 
 SmartTrafficLight trafficLight{};
 
-void print_alter_state() {
-    Serial.println("State has been altered!");
+void print_state_changed() {
+    Serial.println("State has been changed!");
 }
 
 void setup() {
@@ -1567,10 +1569,10 @@ void setup() {
     trafficLight.begin();
     trafficLight.enable();
 
-    trafficLight.onAlterState(print_alter_state);
+    trafficLight.onStateChanged(print_state_changed);
     
-    // trafficLight.onAlterState([]() {
-    //     Serial.println("State has been altered!");
+    // trafficLight.onStateChanged([]() {
+    //     Serial.println("State has been changed!");
     // })
 }
 
@@ -1647,7 +1649,7 @@ void setup() {
   	trafficLight.onDisable(print_disable);
   	trafficLight.onStartBlinking(print_start_blinking);
   	trafficLight.onStopBlinking(print_stop_blinking);
-    trafficLight.onAlterState(print_green_yellow_red);
+    trafficLight.onStateChanged(print_green_yellow_red);
   	
   	trafficLight.begin();
     trafficLight.enable();
