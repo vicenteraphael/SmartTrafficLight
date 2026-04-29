@@ -212,7 +212,7 @@ void SmartTrafficLight::update() {
 
 // State control functions
 
-void SmartTrafficLight::enable(State initialState = GREEN_STATE) {
+void SmartTrafficLight::enable(State initialState) {
     if (!assertInitialized()) return;
     if (state != DISABLED_STATE) return;
 

@@ -60,6 +60,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      - name: Restore Arduino CLI cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.arduino15
+            ~/Arduino
+          key: ${{ runner.os }}-arduino-${{ hashFiles('library.properties', 'platformio.ini') }}
+
       - name: Compile examples
         uses: arduino/compile-sketches@v1
         with:

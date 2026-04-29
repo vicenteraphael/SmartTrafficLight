@@ -98,7 +98,7 @@ class SmartTrafficLight {
 
         void update();
         
-        void enable(State initalState = GREEN_STATE);
+        void enable(State initialState = GREEN_STATE);
         void disable();
         void startBlinking();
         void stopBlinking();
