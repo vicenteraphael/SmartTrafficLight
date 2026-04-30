@@ -1,2 +1,11 @@
 .pio
+.pio/
+pio
+pio/
+
 .vscode
+.vscode/
+vscode
+vscode/
+
+/platformio.ini

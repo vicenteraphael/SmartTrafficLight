@@ -5,17 +5,18 @@ on:
     paths:
       - ".github/workflows/run-tests.yml"
       - "test/**"
+      - "test_env/**"
       - "include/**"
       - "src/**"
       - "library.properties"
-      - "platformio.ini"
   pull_request:
     paths:
       - ".github/workflows/run-tests.yml"
+      - "test/**"
+      - "test_env/**"
       - "include/**"
       - "src/**"
       - "library.properties"
-      - "platformio.ini"
   schedule:
     # Run every Saturday at 12 PM UTC to catch breakage caused by changes to external resources (libraries, platforms).
     - cron: "0 12 * * SAT"
@@ -49,10 +50,10 @@ jobs:
           path: |
             ~/.platformio
             ~/.cache/pip
-          key: ${{ runner.os }}-pio-${{ hashFiles('platformio.ini') }}
+          key: ${{ runner.os }}-pio-${{ hashFiles('library.properties', 'test_env/platformio.ini') }}
 
       - name: Install PlatformIO
         run: pip install platformio==6.1.18
 
       - name: Run test
-        run: pio test -e native -f ${{ matrix.suite }} -v
+        run: pio test -d test_env -e native -f ${{ matrix.suite }} -v
