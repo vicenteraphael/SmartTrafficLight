@@ -1675,6 +1675,8 @@ See also:
 02. [Testing States](/examples/02-TestingStates/README.md)
 03. [Testing Callbacks](/examples/03-TestingCallbacks/README.md)
 04. [All Together](/examples/04-AllTogether/README.md)
+05. [Intersection](/examples/05-Intersection/README.md)
+
 
 ---
 

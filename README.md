@@ -147,7 +147,7 @@ You can, at any moment, change the state of the system without interrupting its 
 
 - `startBlinking()` → enters `BLINKING_YELLOW_STATE`
 - `stopBlinking()` → leaves `BLINKING_YELLOW_STATE` and goes to `GREEN_STATE`
-- `enable()` → starts up the system and goes to `GREEN_STATE`
+- `enable()` → starts up the system and goes to `GREEN_STATE` or any other state passed as a parameter
 - `disable()` → turns the system off and goes to `DISABLED_STATE`
 - `turnGreen()` → starts transition from `RED_STATE` to `GREEN_STATE`
 - `turnRed()` → starts transition from `GREEN_STATE` to `RED_STATE` (passing by `YELLOW_STATE`) or from `YELLOW_STATE` to `RED_STATE`
@@ -187,7 +187,7 @@ You can use these functions to access state-related attributes:
 2. [Testing States](/examples/02-TestingStates/README.md): an example of how to control the library states
 3. [Testing Callbacks](/examples/03-TestingCallbacks/README.md): an example of how to use the library event functions
 4. [All Together](/examples/04-AllTogether/README.md): an example demonstrating all functionalities together
-
+5. [Intersection](/examples/05-Intersection/README.md): an example demonstrating a road intersection controlled by two traffic lights
 
 ---
 
