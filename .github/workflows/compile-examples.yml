@@ -59,7 +59,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Restore Arduino CLI cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.arduino15
