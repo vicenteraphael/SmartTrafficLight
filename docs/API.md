@@ -61,7 +61,7 @@ To install the library, follow these steps:
 
 ### Using PlatformIO:
 
-### By dependancy
+### By dependency
 
 1. Open [`platformio.ini`](https://docs.platformio.org/en/latest/projectconf/index.html), a project configuration file located in the root of PlatformIO project.
 2. Add the following line to the lib_deps option of `[env:]` section:

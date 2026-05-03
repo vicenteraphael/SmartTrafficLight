@@ -54,7 +54,7 @@ An easy-to-use, non-blocking Arduino library for building smart traffic light sy
 
 ### Using PlatformIO:
 
-### By dependancy
+### By dependency
 
 1. Open [`platformio.ini`](https://docs.platformio.org/en/latest/projectconf/index.html), a project configuration file located in the root of PlatformIO project.
 2. Add the following line to the [`lib_deps`](https://docs.platformio.org/en/latest/projectconf/sections/env/options/library/lib_deps.html) option of `[env:]` section:
