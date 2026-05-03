@@ -43,7 +43,6 @@ void SmartTrafficLight::printUninitializedError() const {
 bool SmartTrafficLight::assertInitialized() {
     if (!initialized) {
         printUninitializedError();
-        printf("CUZAO");
 
         state = ERROR_STATE;
         initialized = true;
