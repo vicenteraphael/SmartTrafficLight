@@ -10,7 +10,7 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/SmartTrafficLight.svg?)](https://www.ardu-badge.com/SmartTrafficLight)
-![PlatformIO](https://img.shields.io/badge/PlatformIO-compatible-orange)
+[![PlatformIO Registry](https://badges.registry.platformio.org/packages/vicenteraphael/library/SmartTrafficLight.svg)](https://registry.platformio.org/libraries/vicenteraphael/SmartTrafficLight)
 
 An easy-to-use, non-blocking Arduino library for building smart traffic light systems with support for pedestrian buttons and event-driven behavior.
 
@@ -33,16 +33,15 @@ An easy-to-use, non-blocking Arduino library for building smart traffic light sy
 
 ## Installation
 
-### Using the Arduino IDE (recommended):
+### Using the Arduino IDE:
+
+#### By Sketch
 
 1. Access `Sketch` → `Include Library` → `Manage Libraries... (Ctrl + Shift + I)`
 2. Install `SmartTrafficLight` by Raphael Vicente de Oliveira
-3. Include it in your code:
-    ```cpp
-    #include <SmartTrafficLight.h>
-    ```
+3. [Include it in your code](#Include-it-in-your-code)
 
-### Manual installation
+#### By Manual installation
 
 1. Clone this repository (or download `.zip`):
     ```bash
@@ -50,10 +49,41 @@ An easy-to-use, non-blocking Arduino library for building smart traffic light sy
     ```
 2. Move it to your `Arduino/libraries/` folder
 3. Restart the Arduino IDE
-4. Include it in your code:
-    ```cpp
-    #include <SmartTrafficLight.h>
+4. [Include it in your code](#Include-it-in-your-code)
+
+
+### Using PlatformIO:
+
+### By dependancy
+
+1. Open [`platformio.ini`](https://docs.platformio.org/en/latest/projectconf/index.html), a project configuration file located in the root of PlatformIO project.
+2. Add the following line to the [`lib_deps`](https://docs.platformio.org/en/latest/projectconf/sections/env/options/library/lib_deps.html) option of `[env:]` section:
     ```
+    vicenteraphael/SmartTrafficLight@^2.0.1
+    ```
+4. Build a project, PlatformIO will automatically install dependencies.
+5. [Include it in your code](#Include-it-in-your-code)
+
+
+### By Command Line Interface (CLI)
+
+1. Open [`PlatformIO Core CLI`](https://docs.platformio.org/en/latest/core/index.html)
+2. Change directory (`cd`) to the PlatformIO project where [`platformio.ini`](https://docs.platformio.org/en/latest/projectconf/index.html) is located.
+3. Copy the following [`pio pkg install`](https://docs.platformio.org/en/latest/core/userguide/pkg/cmd_install.html) command and paste into the CLI shell, press `Enter`:
+    ``` bash
+    pio pkg install --library "vicenteraphael/SmartTrafficLight@^2.0.1"
+    ```
+4. [Include it in your code](#Include-it-in-your-code)
+
+
+### Include it in your code
+
+`SmartTrafficLight` library provides the following header files that can be included in your project:
+
+```cpp
+#include <SmartTrafficLight.h>
+```
+
 
 ---
 
@@ -104,7 +134,8 @@ void loop() {
 4. Start the traffic light with `enable()`
 5. Call `update()` continuously inside `loop()` <br><br>
 
-> **Note:** You can also pass the pins directly through the constructor instead of calling `attach()`
+> [!NOTE]
+> You can also pass the pins directly through the constructor instead of calling `attach()`
 
 Like this:
 
@@ -138,7 +169,8 @@ In practice, the states can be represented by the following schema:
 > `ANY STATE` → `BLINKING_YELLOW_STATE` = `startBlinking()` <br>
 > `ANY STATE` → `DISABLED_STATE` = `disable()`
 
-> **Note:** by default, the system starts on `DISABLED_STATE`
+> [!NOTE]
+> By default, the system starts on `DISABLED_STATE`
 
 
 ### State control functions
@@ -152,7 +184,8 @@ You can, at any moment, change the state of the system without interrupting its 
 - `turnGreen()` → starts transition from `RED_STATE` to `GREEN_STATE`
 - `turnRed()` → starts transition from `GREEN_STATE` to `RED_STATE` (passing by `YELLOW_STATE`) or from `YELLOW_STATE` to `RED_STATE`
 
-> **Note:** if the change of state is invalid, the call is ignored
+> [!NOTE]
+> If the change of state is invalid, the call is ignored
 
 
 ### Event Functions
@@ -168,7 +201,8 @@ You can attach custom callbacks that will be triggered when the state changes:
 - `onStopBlinking()` → called when the system stops blinking
 - `onStateChanged()` → called whenever the state is changed
 
-> **Note:** if the event functions isn't set up, the call is ignored when the state occurs
+> [!NOTE]
+> If the event functions isn't set up, the call is ignored when the state occurs
 
 ### Getter methods
 
