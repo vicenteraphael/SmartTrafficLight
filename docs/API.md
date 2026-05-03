@@ -2,52 +2,53 @@
 
 
 ## Table of contents
-1. [Quick start](#Quick-start)
-2. [Constructors](#Constructors)
-    - [`SmartTrafficLight()`](#SmartTrafficLight)
+1. [Installation](#installation)
+2. [Quick start](#quick-start)
+3. [Core](#core)
+    - [`SmartTrafficLight()`](#smarttrafficlight)
     - [`attach()`](#attach)
-    - [`setIntervals()`](#setIntervals)
-3. [Initialization and update](#Initialization-and-update)
+    - [`setIntervals()`](#setintervals)
     - [`begin()`](#begin)
     - [`update()`](#update)
-4. [State Control](#State-Control)
+4. [State Control](#state-control)
     - [`enable()`](#enable)
     - [`disable()`](#disable)
-    - [`startBlinking()`](#startBlinking)
-    - [`stopBlinking()`](#stopBlinking)
-    - [`turnGreen()`](#turnGreen)
-    - [`turnRed()`](#turnRed)
+    - [`startBlinking()`](#startblinking)
+    - [`stopBlinking()`](#stopblinking)
+    - [`turnGreen()`](#turngreen)
+    - [`turnRed()`](#turnred)
 5. [Getter methods](#getter-methods)
-    - [`getPinOn()`](#getPinOn)
-    - [`getState()`](#getState)
-    - [`getStateToString()`](#getStateToString)
-6. [Event functions and callbacks](#Event-functions-and-callbacks)
-    - [`onTurnGreen()`](#onTurnGreen)
-    - [`onTurnYellow()`](#onTurnYellow)
-    - [`onTurnRed()`](#onTurnRed)
-    - [`onEnable()`](#onEnable)
-    - [`onDisable()`](#onDisable)
-    - [`onStartBlinking()`](#onStartBlinking)
-    - [`onStopBlinking()`](#onStopBlinking)
-    - [`onStateChanged()`](#onStateChanged)
-7. [Full example usage](#Full-example-usage)
+    - [`getPinOn()`](#getpinon)
+    - [`getState()`](#getstate)
+    - [`getStateToString()`](#getstatetostring)
+6. [Event functions and callbacks](#event-functions-and-callbacks)
+    - [`onTurnGreen()`](#onturngreen)
+    - [`onTurnYellow()`](#onturnyellow)
+    - [`onTurnRed()`](#onturnred)
+    - [`onEnable()`](#onenable)
+    - [`onDisable()`](#ondisable)
+    - [`onStartBlinking()`](#onstartblinking)
+    - [`onStopBlinking()`](#onstopblinking)
+    - [`onStateChanged()`](#onstatechanged)
+7. [Full example usage](#full-example-usage)
+
 
 ---
 
-## Quick start
+
+## Installation
 
 To install the library, follow these steps:
 
-#### Using the Arduino IDE (recommended):
+### Using the Arduino IDE:
+
+#### By Sketch
 
 1. Access `Sketch` → `Include Library` → `Manage Libraries... (Ctrl + Shift + I)`
 2. Install `SmartTrafficLight` by Raphael Vicente de Oliveira
-3. Include it in your code:
-    ```cpp
-    #include <SmartTrafficLight.h>
-    ```
+3. [Include it in your code](#Include-it-in-your-code)
 
-#### Manual installation
+#### By Manual installation
 
 1. Clone this repository (or download `.zip`):
     ```bash
@@ -55,10 +56,46 @@ To install the library, follow these steps:
     ```
 2. Move it to your `Arduino/libraries/` folder
 3. Restart the Arduino IDE
-4. Include it in your code:
-    ```cpp
-    #include <SmartTrafficLight.h>
+4. [Include it in your code](#Include-it-in-your-code)
+
+
+### Using PlatformIO:
+
+### By dependency
+
+1. Open [`platformio.ini`](https://docs.platformio.org/en/latest/projectconf/index.html), a project configuration file located in the root of PlatformIO project.
+2. Add the following line to the lib_deps option of `[env:]` section:
     ```
+    vicenteraphael/SmartTrafficLight@^2.0.1
+    ```
+4. Build a project, PlatformIO will automatically install dependencies.
+5. [Include it in your code](#Include-it-in-your-code)
+
+
+### By Command Line Interface (CLI)
+
+1. Open PlatformIO Core CLI
+2. Change directory (`cd`) to the PlatformIO project where [`platformio.ini`](https://docs.platformio.org/en/latest/projectconf/index.html) is located.
+3. Copy the following [`pio pkg install`](https://docs.platformio.org/en/latest/core/userguide/pkg/cmd_install.html) command and paste into the CLI shell, press Enter:
+    ``` bash
+    pio pkg install --library "vicenteraphael/SmartTrafficLight@^2.0.1"
+    ```
+4. [Include it in your code](#Include-it-in-your-code)
+
+
+### Include it in your code
+
+`SmartTrafficLight` library provides the following header files that can be included in your project:
+
+```cpp
+#include <SmartTrafficLight.h>
+```
+
+
+---
+
+
+## Quick start
 
 The example below shows the minimal setup required to run the traffic light:
 
@@ -114,10 +151,11 @@ Common mistakes:
 - Calling `attach()` after `begin()`
 - Forgetting to set the pins in the constructor or `attach()`
 
+
 ---
 
 
-## Constructors
+## Core
 
 
 ### `SmartTrafficLight()`
@@ -125,7 +163,8 @@ Common mistakes:
 
 **Description:**
 
-⚠️ Used to instantiate the class and, optionally, configure the LED pins
+> [!IMPORTANT]
+Used to instantiate the class and, optionally, configure the LED pins
 
 Creates an instance of `SmartTrafficLight` and, optionally, configures the pins to be used. Must be used before calling any other method. If the parameters are omitted, the pins can also be configured later by [`attach()`](#attach).
 
@@ -136,7 +175,8 @@ Creates an instance of `SmartTrafficLight` and, optionally, configures the pins 
 SmartTrafficLight() = default
 SmartTrafficLight(const uint8_t gPin, const uint8_t yPin, const uint8_t rPin, const uint8_t bPin = NO_PIN)
 ```
-> **Note:** `NO_PIN` is an internal macro with value `255`, which literally means "no pin"
+> [!NOTE]
+> `NO_PIN` is an internal macro with value `255`, which literally means "no pin"
 
 **Parameters:**
 
@@ -205,7 +245,8 @@ void loop() {}
 
 **Description:**
 
-⚠️ **CONDITIONALLY REQUIRED** - This method must be called and only if the pins were not set in the constructor, aka [`SmartTrafficLight()`](#smarttrafficlight)
+> [!IMPORTANT]
+> **CONDITIONALLY REQUIRED** - This method must be called and only if the pins were not set in the constructor, aka [`SmartTrafficLight()`](#smarttrafficlight)
 
 Configures the pins to be used. Can be called to configure the pins instead of [`SmartTrafficLight()`](#smarttrafficlight)
 
@@ -216,7 +257,8 @@ Configures the pins to be used. Can be called to configure the pins instead of [
 void attach(const uint8_t gPin, const uint8_t yPin, const uint8_t rPin, const uint8_t bPin = NO_PIN)
 ```
 
-> **Note:** `NO_PIN` is an internal macro with value `255`, which literally means "no pin"
+> [!NOTE]
+> `NO_PIN` is an internal macro with value `255`, which literally means "no pin"
 
 **Parameters:**
 
@@ -288,7 +330,8 @@ void setIntervals(const unsigned long gInterval, const unsigned long yInterval, 
 - `rInterval`: Amount of time, in milliseconds, in which the red pin shall be `HIGH`
 - `minGTime`: **(OPTIONAL)** Minimum amount of time, in milliseconds, in which the green pin shall be `HIGH` before triggering the button. **DEFAULT VALUE:** 5000 milliseconds.
 
-> **Note:** `DEFAULT_MIN_GREEN_TIME` is an internal macro for the default minimum green time (5000 milliseconds). The other literals are:
+> [!NOTE]
+> `DEFAULT_MIN_GREEN_TIME` is an internal macro for the default minimum green time (5000 milliseconds). The other literals are:
 
 ```cpp
 #define DEFAULT_GREEN_INTERVAL (10000)
@@ -337,26 +380,25 @@ void loop() {}
 ---
 
 
-## Initialization and update
-
-
 ### `begin()`
 
 
 **Description:**
 
-⚠️ **REQUIRED** - This method must be called before using the traffic light
+> [!IMPORTANT]
+> **REQUIRED** - This method must be called before using the traffic light
 
-Initializes the system and checks if the pins were configured successfully. If not, the following message is displayed on the serial monitor (if `Serial.begin()` was previously called) and the program enters `ERROR_STATE`, which is a non-blocking state that triggers a constant blinking on the `LED_BUILTIN` pin (usually digital pin nº 13 or nº 2).
+> [!WARNING]
+> Initializes the system and checks if the pins were configured successfully. If not, the following message is displayed on the serial monitor (if `Serial.begin()` was previously called) and the program enters `ERROR_STATE`, which is a non-blocking state that triggers a constant blinking on the `LED_BUILTIN` pin (usually digital pin nº 13 or nº 2).
+> ```
+> Fatal: uninitialized...
+> Use attach() to configure the pins
+> Use setIntervals() to customize the traffic light intervals
+> Use begin() to start the traffic light
+> ```
 
-```
-Fatal: uninitialized...
-Use attach() to configure the pins
-Use setIntervals() to customize the traffic light intervals
-Use begin() to start the traffic light
-```
-
-> **Note:** the library is fail-safe: calling any public method before begin() will automatically trigger ERROR_STATE
+> [!NOTE]
+> The library is fail-safe: calling any public method before begin() will automatically trigger `ERROR_STATE`
 
 
 **Definition:**
@@ -412,7 +454,8 @@ void loop() {}
 
 **Description:**
 
-⚠️ **REQUIRED** - This method must be called as often as possible in order for the traffic light logic to work. The library is non-blocking and relies on `millis()`, so `update()` drives the internal state machine.
+> [!IMPORTANT]
+> **REQUIRED** - This method must be called as often as possible in order for the traffic light logic to work. The library is non-blocking and relies on `millis()`, so `update()` drives the internal state machine.
 
 Updates the current state of the traffic light FSM using millis(). Needs to be continuously called inside `loop()`
 
@@ -503,7 +546,8 @@ By default, the system starts on `DISABLED_STATE`
 
 **Description:**
 
-⚠️ **REQUIRED** - This method must be called to start operation
+> [!IMPORTANT]
+> **REQUIRED** - This method must be called to start operation
 
 Changes the current state from `DISABLED_STATE` to `GREEN_STATE` (or any other specified state), enabling the traffic light for use. If the current state is different from `DISABLED_STATE`, the call is ignored.
 
@@ -563,7 +607,8 @@ void loop() {
 
 Changes the current state, whatever it may be, to `DISABLED_STATE`, taking the entire traffic light out of service.
 
-> **Note:** this is the default state in which the system starts
+> [!NOTE]
+> This is the default state in which the system starts
 
 
 **Definition:**
