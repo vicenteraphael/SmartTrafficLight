@@ -388,7 +388,7 @@ void loop() {}
 > [!IMPORTANT]
 > **REQUIRED** - This method must be called before using the traffic light
 
-> [!DANGER]
+> [!WARNING]
 > Initializes the system and checks if the pins were configured successfully. If not, the following message is displayed on the serial monitor (if `Serial.begin()` was previously called) and the program enters `ERROR_STATE`, which is a non-blocking state that triggers a constant blinking on the `LED_BUILTIN` pin (usually digital pin nº 13 or nº 2).
 > ```
 > Fatal: uninitialized...
